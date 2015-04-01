@@ -1,7 +1,9 @@
 <?php
 
-class PluginVs_ModuleVs extends Module {
+class PluginVs_ModuleVs extends ModuleORM
+{
 
 
 }
+
 ?>

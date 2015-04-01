@@ -1,6 +1,6 @@
 <?php
 
-class PluginVs_ModuleVs_MapperVs extends Mapper
+class PluginVs_ModuleVs_MapperVs extends MapperORM
 {
 
 }

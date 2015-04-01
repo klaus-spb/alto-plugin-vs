@@ -1,12 +1,13 @@
 <?php
 
-class PluginVs_HookVs extends Hook {
+class PluginVs_HookVs extends Hook
+{
 
     /*
      * Регистрация событий на хуки
      */
-    public function RegisterHook() {
-
+    public function RegisterHook()
+    {
 
 
         /*

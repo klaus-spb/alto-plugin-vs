@@ -1,31 +1,37 @@
 <?php
 
-class PluginVs_ActionVs extends ActionPlugin {
+class PluginTournament_ActionVs extends ActionPlugin
+{
 
     /**
      * Инициализация экшена
      */
-    public function Init() {
+    public function Init()
+    {
         $this->SetDefaultEvent('index');
     }
 
     /**
      * Регистрируем евенты
      */
-    protected function RegisterEvent() {
-        $this->AddEvent('index','EventIndex');
+    protected function RegisterEvent()
+    {
+        $this->AddEvent('index', 'EventIndex');
 
     }
 
-    protected function EventIndex() {
+    protected function EventIndex()
+    {
 
     }
 
     /**
      * Завершение работы экшена
      */
-    public function EventShutdown() {
+    public function EventShutdown()
+    {
 
     }
 }
+
 ?>
