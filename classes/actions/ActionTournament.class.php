@@ -81,10 +81,10 @@ class PluginTournament_ActionVs extends ActionPlugin
         //$this->Viewer_AddWidget('right', 'tournamentsheduleloader', array('plugin' => 'vs', 'oTournament' => $this->oTournament, 'myteam' => $this->myTeam), 203);
         //$this->Viewer_AddWidget('right', 'tournamentteamtable', array('plugin' => 'vs', 'oTournament' => $this->oTournament), 202);
 
-        $this->Viewer_Assign('oGame', $this->oGame);
-        $this->Viewer_Assign('oTournament', $this->oTournament);
+        E::ModuleViewer()->Assign('oGame', $this->oGame);
+        E::ModuleViewer()->Assign('oTournament', $this->oTournament);
 
-        if ($this->isAdmin) $this->Viewer_Assign('admin', 'yes');
+        if ($this->isAdmin) E::ModuleViewer()->Assign('admin', 'yes');
 
         $this->Viewer_AddHtmlTitle($this->oTournament->getName());
 
@@ -113,6 +113,28 @@ class PluginTournament_ActionVs extends ActionPlugin
 
     protected function EventMainPageTournament()
     {
+        $this->sMenuSubItemSelect = "index";
+
+        $iPage = $this->_getPageNum();
+
+        $aResult = E::Module('PluginVs\Vs')->GetTopicsByTournament($iPage, 10, $this->oTournament->getTournamentId());
+
+        $aTopics = $aResult['collection'];
+        /**
+         * Формируем постраничность
+         */
+
+        $aPaging = $this->Viewer_MakePaging($aResult['count'], $iPage, 10, 4, $this->oTournament->getUrlFull());
+        /**
+         * Загружаем переменные в шаблон
+         */
+        E::ModuleViewer()->Assign('aTopics', $aTopics);
+        E::ModuleViewer()->Assign('aPaging', $aPaging);
+
+        $Indexmatches = E::Module('PluginVs\Vs')->StreamReadMainPage(10, 0, $this->oTournament->getTournamentId(), 0, 0,
+            0, 0);
+        E::ModuleViewer()->Assign('Indexmatches', $Indexmatches);
+
         $this->SetTemplateAction('index');
     }
 
@@ -176,6 +198,18 @@ class PluginTournament_ActionVs extends ActionPlugin
 
     }
 
+    protected function _getPageNum($nNumParam = null)
+    {
+
+        $nPage = 1;
+        if (!is_null($nNumParam) && preg_match("/^page(\d+)$/i", $this->GetParam(intval($nNumParam)), $aMatch)) {
+            $nPage = $aMatch[1];
+        } elseif (preg_match("/^page(\d+)$/i", $this->GetLastParam(), $aMatch)) {
+            $nPage = $aMatch[1];
+        }
+        return $nPage;
+    }
+
     /**
      * Завершение работы экшена
      */
@@ -184,15 +218,15 @@ class PluginTournament_ActionVs extends ActionPlugin
         /**
          * Загружаем переменные в шаблон
          */
-        $this->Viewer_Assign('sMenuHeadItemSelect', $this->sMenuHeadItemSelect);
-        $this->Viewer_Assign('sMenuItemSelect', $this->sMenuItemSelect);
-        $this->Viewer_Assign('sMenuSubItemSelect', $this->sMenuSubItemSelect);
-        $this->Viewer_Assign('oTournament', $this->oTournament);
-        $this->Viewer_Assign('oBlog', $this->oTournament->getBlog());
-        $this->Viewer_Assign('oGame', $this->oGame);
-        $this->Viewer_Assign('tournament_id', $this->oTournament->getTournamentId());
-        $this->Viewer_Assign('myteam', $this->myTeam);
-        $this->Viewer_Assign('myteamtournament', $this->myTeamTournament);
+        E::ModuleViewer()->Assign('sMenuHeadItemSelect', $this->sMenuHeadItemSelect);
+        E::ModuleViewer()->Assign('sMenuItemSelect', $this->sMenuItemSelect);
+        E::ModuleViewer()->Assign('sMenuSubItemSelect', $this->sMenuSubItemSelect);
+        E::ModuleViewer()->Assign('oTournament', $this->oTournament);
+        E::ModuleViewer()->Assign('oBlog', $this->oTournament->getBlog());
+        E::ModuleViewer()->Assign('oGame', $this->oGame);
+        E::ModuleViewer()->Assign('tournament_id', $this->oTournament->getTournamentId());
+        E::ModuleViewer()->Assign('myteam', $this->myTeam);
+        E::ModuleViewer()->Assign('myteamtournament', $this->myTeamTournament);
     }
 }
 

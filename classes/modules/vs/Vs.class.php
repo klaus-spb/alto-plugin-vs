@@ -83,6 +83,24 @@ class PluginVs_ModuleVs extends ModuleORM
         return $admin;
 
     }
+
+    public function GetTopicsByTournament($iPage, $iPerPage, $tournament_id, $bAddAccessible = false)
+    {
+        $aFilter = array(
+
+            'tournament_id' => $tournament_id,
+            'topic_publish' => 1,
+            'order' => array('t.topic_sticky desc', 't.topic_date_add desc')
+
+        );
+
+        if ($this->oUserCurrent && $bAddAccessible) {
+            $aOpenBlogs = $this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent);
+            if (count($aOpenBlogs)) $aFilter['blog_type']['close'] = $aOpenBlogs;
+        }
+
+        return $this->Topic_GetTopicsByFilter($aFilter, $iPage, $iPerPage);
+    }
 }
 
 ?>
