@@ -95,11 +95,11 @@ class PluginVs_ModuleVs extends ModuleORM
         );
 
         if ($this->oUserCurrent && $bAddAccessible) {
-            $aOpenBlogs = $this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent);
+            $aOpenBlogs = E::ModuleBlog()->GetAccessibleBlogsByUser($this->oUserCurrent);
             if (count($aOpenBlogs)) $aFilter['blog_type']['close'] = $aOpenBlogs;
         }
 
-        return $this->Topic_GetTopicsByFilter($aFilter, $iPage, $iPerPage);
+        return E::ModuleTopic()->GetTopicsByFilter($aFilter, $iPage, $iPerPage);
     }
 }
 
