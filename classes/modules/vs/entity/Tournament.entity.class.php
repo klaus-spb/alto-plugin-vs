@@ -4,6 +4,7 @@ class PluginVs_ModuleVs_EntityTournament extends EntityORM
 {
     protected $aRelations = array(
         'game' => array(self::RELATION_TYPE_BELONGS_TO, 'PluginVs_ModuleVs_EntityGame', 'game_id'),
+        'game_type' => array(self::RELATION_TYPE_BELONGS_TO, 'PluginVs_ModuleVs_EntityGameType', 'game_type_id'),
         'blog' => array(self::RELATION_TYPE_BELONGS_TO, 'ModuleBlog_EntityBlog', 'blog_id'),
         'waitlist' => array(self::RELATION_TYPE_BELONGS_TO, 'ModuleTopic_EntityTopic', 'waitlist_topic_id'),
         'prolong' => array(self::RELATION_TYPE_BELONGS_TO, 'ModuleTopic_EntityTopic', 'prolong_topic_id'),

@@ -28,27 +28,27 @@ class PluginVs_ModuleVs extends ModuleORM
             if (false === ($myTeamTournament = $this->Cache_Get($sKey))) {
 
                 if ($this->User_IsAuthorization()) {
-                    $aTeam = E::Module('PluginVs\Vs')->GetTeamTournamentByFilter(array(
+                    $oTeamTournament = E::Module('PluginVs\Vs')->GetTeamTournamentByFilter(array(
                         'tournament_id' => $oTournament->getTournamentId(),
                         'player_id' => $this->oUserCurrent->GetUserId()
                     ));
-                    if ($aTeam) {
-                        $myTeamTournament = $aTeam->getId();
+                    if ($oTeamTournament) {
+                        $myTeamTournament = $oTeamTournament->getId();
                     }
                 }
 
-                if ($myTeamTournament == 0 && $oTournament->getGametypeId() == 3 && $this->User_IsAuthorization()) {
-                    if ($aTeam = E::Module('PluginVs\Vs')->GetPlayerTournamentByFilter(array(
+                if ($myTeamTournament == 0 && $oTournament->getGameType()->getType() == 'team') {
+                    if ($oPlayerTeamTournament = E::Module('PluginVs\Vs')->GetPlayerTeamTournamentByFilter(array(
                         'tournament_id' => $oTournament->getTournamentId(),
                         'user_id' => $this->oUserCurrent->GetUserId()
                     ))
                     ) {
-                        if ($aTeam = E::Module('PluginVs\Vs')->GetTeamTournamentByFilter(array(
+                        if ($oTeamTournament = E::Module('PluginVs\Vs')->GetTeamTournamentByFilter(array(
                             'tournament_id' => $oTournament->getTournamentId(),
-                            'team_id' => $aTeam->getTeamId()
+                            'team_id' => $oPlayerTournament->getTeamId()
                         ))
                         ) {
-                            $myTeamTournament = $aTeam->getId();
+                            $myTeamTournament = $oTeamTournament->getId();
                         }
                     }
                 }
@@ -69,13 +69,13 @@ class PluginVs_ModuleVs extends ModuleORM
             if (false === ($myTeam = $this->Cache_Get($sKey))) {
                 $admin = false;
                 if ($this->User_IsAuthorization()) {
-                    $aAdmin = E::Module('PluginVs\Vs')->GetTournamentAdminItemsByFilter(array(
+                    $aTournamentAdmin = E::Module('PluginVs\Vs')->GetTournamentAdminItemsByFilter(array(
                         'tournament_id' => $oTournament->getTournamentId(),
                         'user_id' => $this->oUserCurrent->GetUserId(),
                         '#page' => 'count',
                         'expire >=' => date("Y-m-d")
                     ));
-                    if ($aAdmin['count'] > 0) $admin = true;
+                    if ($aTournamentAdmin['count'] > 0) $admin = true;
                 }
                 $this->Cache_Set($admin, $sKey, array("PluginVs_ModuleVs_EntityTournamentAdmin_save"), 60 * 60 * 24);
             }
@@ -88,11 +88,9 @@ class PluginVs_ModuleVs extends ModuleORM
     public function GetTopicsByTournament($iPage, $iPerPage, $tournament_id, $bAddAccessible = false)
     {
         $aFilter = array(
-
             'tournament_id' => $tournament_id,
             'topic_publish' => 1,
             'order' => array('t.topic_sticky desc', 't.topic_date_add desc')
-
         );
 
         if ($this->oUserCurrent && $bAddAccessible) {
