@@ -95,11 +95,83 @@ class PluginTournament_ActionVs extends ActionPlugin
      */
     protected function RegisterEvent()
     {
-        $this->AddEvent('index', 'EventIndex');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^players$/', 'EventPlayers');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^schedule$/', 'EventSchedule');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^rules$/', 'EventRules');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^events$/', 'EventEvents');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^admin$/', 'EventAdmin');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^stats$/', 'EventStats');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^po/', 'EventPo');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^stats_sh$/', 'EventStatsSh');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^player_stats$/', 'EventPlayerStats');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^match_comment$/', 'EventMatchComment');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^match_insert$/', 'EventMatchInsert');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^match/', 'EventMatch');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', 'EventMainPageTournament');
+        $this->AddEventPreg('/^[\w\-\_]+$/i', '/^[\w\-\_]+$/i', 'EventMainPageTournament');
+    }
+
+    protected function EventMainPageTournament()
+    {
+        $this->SetTemplateAction('index');
+    }
+
+    protected function EventPlayers()
+    {
 
     }
 
-    protected function EventIndex()
+    protected function EventSchedule()
+    {
+
+    }
+
+    protected function EventRules()
+    {
+
+    }
+
+    protected function EventEvents()
+    {
+
+    }
+
+    protected function EventAdmin()
+    {
+
+    }
+
+    protected function EventStats()
+    {
+
+    }
+
+    protected function EventPo()
+    {
+
+    }
+
+    protected function EventStatsSh()
+    {
+
+    }
+
+    protected function EventPlayerStats()
+    {
+
+    }
+
+    protected function EventMatchComment()
+    {
+
+    }
+
+    protected function EventMatchInsert()
+    {
+
+    }
+
+    protected function EventMatch()
     {
 
     }
@@ -109,7 +181,18 @@ class PluginTournament_ActionVs extends ActionPlugin
      */
     public function EventShutdown()
     {
-
+        /**
+         * Загружаем переменные в шаблон
+         */
+        $this->Viewer_Assign('sMenuHeadItemSelect', $this->sMenuHeadItemSelect);
+        $this->Viewer_Assign('sMenuItemSelect', $this->sMenuItemSelect);
+        $this->Viewer_Assign('sMenuSubItemSelect', $this->sMenuSubItemSelect);
+        $this->Viewer_Assign('oTournament', $this->oTournament);
+        $this->Viewer_Assign('oBlog', $this->oTournament->getBlog());
+        $this->Viewer_Assign('oGame', $this->oGame);
+        $this->Viewer_Assign('tournament_id', $this->oTournament->getTournamentId());
+        $this->Viewer_Assign('myteam', $this->myTeam);
+        $this->Viewer_Assign('myteamtournament', $this->myTeamTournament);
     }
 }
 
