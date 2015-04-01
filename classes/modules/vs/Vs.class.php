@@ -77,8 +77,9 @@ class PluginVs_ModuleVs extends ModuleORM
                     ));
                     if ($aAdmin['count'] > 0) $admin = true;
                 }
+                $this->Cache_Set($admin, $sKey, array("PluginVs_ModuleVs_EntityTournamentAdmin_save"), 60 * 60 * 24);
             }
-            $this->Cache_Set($admin, $sKey, array("PluginVs_ModuleVs_EntityTournamentAdmin_save"), 60 * 60 * 24);
+
         }
         return $admin;
 
