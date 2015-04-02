@@ -26,38 +26,19 @@ class PluginVs extends Plugin
     );
 
     // Объявление переопределений (модули, мапперы и сущности)
-    protected $aInherits = array(/**
-     * Переопределение модулей (функционал):
-     * 'module'  =>array('ModuleTopic'=>'_ModuleTopic'),
-     *
-     * К классу ModuleTopic (/classes/modules/Topic.class.php) добавляются методы из
-     * PluginAbcplugin_ModuleTopic (/plugins/abcplugin/classes/modules/Topic.class.php) - новые или замена существующих
-     *
-     *
-     *
-     * Переопределение мапперов (запись/чтение объектов в/из БД):
-     * 'mapper'  =>array('ModuleTopic_MapperTopic' => '_ModuleTopic_MapperTopic'),
-     *
-     * К классу ModuleTopic_MapperTopic (/classes/modules/mapper/Topic.mapper.class.php) добавляются методы из
-     * PluginAbcplugin_ModuleTopic_EntityTopic (/plugins/abcplugin/classes/modules/mapper/Topic.mapper.class.php) - новые или замена существующих
-     *
-     *
-     *
-     * Переопределение сущностей (интерфейс между объектом и записью/записями в БД):
-     * 'entity'  =>array('ModuleTopic_EntityTopic' => '_ModuleTopic_EntityTopic'),
-     *
-     * К классу ModuleTopic_EntityTopic (/classes/modules/entity/Topic.entity.class.php) добавляются методы из
-     * PluginAbcplugin_ModuleTopic_EntityTopic (/plugins/abcplugin/classes/modules/entity/Topic.entity.class.php) - новые или замена существующих
-     *
-     */
-    );
+    protected $aInherits
+        = array(
+            'action' => array(
+                'ActionAdmin' => 'PluginVs_ActionAdmin',
+            ),
+        );
 
     // Активация плагина
     public function Activate()
     {
 
         if (!$this->isTableExists('prefix_tablename')) {
-            $this->ExportSQL(dirname(__FILE__).'/install/db/install.sql'); // Если нам надо изменить БД, делаем это здесь.
+            $this->ExportSQL(dirname(__FILE__) . '/install/db/install.sql'); // Если нам надо изменить БД, делаем это здесь.
         }
 
         return true;
