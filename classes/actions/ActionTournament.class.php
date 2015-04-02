@@ -1,6 +1,6 @@
 <?php
 
-class PluginTournament_ActionVs extends ActionPlugin
+class PluginVs_ActionTournament extends ActionPlugin
 {
 
     /**
@@ -91,6 +91,25 @@ class PluginTournament_ActionVs extends ActionPlugin
     }
 
     /**
+     * Завершение работы экшена
+     */
+    public function EventShutdown()
+    {
+        /**
+         * Загружаем переменные в шаблон
+         */
+        E::ModuleViewer()->Assign('sMenuHeadItemSelect', $this->sMenuHeadItemSelect);
+        E::ModuleViewer()->Assign('sMenuItemSelect', $this->sMenuItemSelect);
+        E::ModuleViewer()->Assign('sMenuSubItemSelect', $this->sMenuSubItemSelect);
+        E::ModuleViewer()->Assign('oTournament', $this->oTournament);
+        E::ModuleViewer()->Assign('oBlog', $this->oTournament->getBlog());
+        E::ModuleViewer()->Assign('oGame', $this->oGame);
+        E::ModuleViewer()->Assign('tournament_id', $this->oTournament->getTournamentId());
+        E::ModuleViewer()->Assign('myteam', $this->myTeam);
+        E::ModuleViewer()->Assign('myteamtournament', $this->myTeamTournament);
+    }
+
+    /**
      * Регистрируем евенты
      */
     protected function RegisterEvent()
@@ -136,6 +155,18 @@ class PluginTournament_ActionVs extends ActionPlugin
         E::ModuleViewer()->Assign('Indexmatches', $Indexmatches);
 
         $this->SetTemplateAction('index');
+    }
+
+    protected function _getPageNum($nNumParam = null)
+    {
+
+        $nPage = 1;
+        if (!is_null($nNumParam) && preg_match("/^page(\d+)$/i", $this->GetParam(intval($nNumParam)), $aMatch)) {
+            $nPage = $aMatch[1];
+        } elseif (preg_match("/^page(\d+)$/i", $this->GetLastParam(), $aMatch)) {
+            $nPage = $aMatch[1];
+        }
+        return $nPage;
     }
 
     protected function EventPlayers()
@@ -196,37 +227,6 @@ class PluginTournament_ActionVs extends ActionPlugin
     protected function EventMatch()
     {
 
-    }
-
-    protected function _getPageNum($nNumParam = null)
-    {
-
-        $nPage = 1;
-        if (!is_null($nNumParam) && preg_match("/^page(\d+)$/i", $this->GetParam(intval($nNumParam)), $aMatch)) {
-            $nPage = $aMatch[1];
-        } elseif (preg_match("/^page(\d+)$/i", $this->GetLastParam(), $aMatch)) {
-            $nPage = $aMatch[1];
-        }
-        return $nPage;
-    }
-
-    /**
-     * Завершение работы экшена
-     */
-    public function EventShutdown()
-    {
-        /**
-         * Загружаем переменные в шаблон
-         */
-        E::ModuleViewer()->Assign('sMenuHeadItemSelect', $this->sMenuHeadItemSelect);
-        E::ModuleViewer()->Assign('sMenuItemSelect', $this->sMenuItemSelect);
-        E::ModuleViewer()->Assign('sMenuSubItemSelect', $this->sMenuSubItemSelect);
-        E::ModuleViewer()->Assign('oTournament', $this->oTournament);
-        E::ModuleViewer()->Assign('oBlog', $this->oTournament->getBlog());
-        E::ModuleViewer()->Assign('oGame', $this->oGame);
-        E::ModuleViewer()->Assign('tournament_id', $this->oTournament->getTournamentId());
-        E::ModuleViewer()->Assign('myteam', $this->myTeam);
-        E::ModuleViewer()->Assign('myteamtournament', $this->myTeamTournament);
     }
 }
 
