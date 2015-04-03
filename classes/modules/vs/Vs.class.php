@@ -35,9 +35,11 @@ class PluginVs_ModuleVs extends ModuleORM
 
                 if (!$oMyTeamTournament && $oTournament->getTournamentType()->getType() == 'team') {
                     if ($oPlayerTournament = E::Module('PluginVs\Vs')->GetPlayerTournamentByFilter(array(
-                        'tournament_id' => $oTournament->getTournamentId(),
-                        'user_id' => $this->oUserCurrent->GetUserId()
-                    ))
+                            'tournament_id' => $oTournament->getTournamentId(),
+                            'user_id' => $this->oUserCurrent->GetUserId(),
+                            'status' => 'accepted'
+                        )
+                    )
                     ) {
                         $oMyTeamTournament = E::Module('PluginVs\Vs')->GetTeamTournamentByFilter(array(
                             'tournament_id' => $oTournament->getTournamentId(),
