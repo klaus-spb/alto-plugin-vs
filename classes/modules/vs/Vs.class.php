@@ -20,41 +20,35 @@ class PluginVs_ModuleVs extends ModuleORM
 
     public function GetMyTeamTournament($oTournament)
     {
-        $nTeamTournament = 0;
+        $oMyTeamTournament = null;
         if ($this->oUserCurrent) {
 
             $sKey = "user_" . $this->oUserCurrent->GetUserId() . "_teamtournament_" . $oTournament->getTournamentId();
 
             if (false === ($nTeamTournament = $this->Cache_Get($sKey))) {
 
-                if ($oTeamTournament = E::Module('PluginVs\Vs')->GetTeamTournamentByFilter(array(
+                $oMyTeamTournament = E::Module('PluginVs\Vs')->GetTeamTournamentByFilter(array(
                     'tournament_id' => $oTournament->getTournamentId(),
                     'player_id' => $this->oUserCurrent->GetUserId()
-                ))
-                ) {
-                    $nTeamTournament = $oTeamTournament->getId();
-                }
+                ));
 
 
-                if ($nTeamTournament == 0 && $oTournament->getGameType()->getType() == 'team') {
-                    if ($oPlayerTeamTournament = E::Module('PluginVs\Vs')->GetPlayerTeamTournamentByFilter(array(
+                if (!$oMyTeamTournament && $oTournament->getTournamentType()->getType() == 'team') {
+                    if ($oPlayerTournament = E::Module('PluginVs\Vs')->GetPlayerTournamentByFilter(array(
                         'tournament_id' => $oTournament->getTournamentId(),
                         'user_id' => $this->oUserCurrent->GetUserId()
                     ))
                     ) {
-                        if ($oTeamTournament = E::Module('PluginVs\Vs')->GetTeamTournamentByFilter(array(
+                        $oMyTeamTournament = E::Module('PluginVs\Vs')->GetTeamTournamentByFilter(array(
                             'tournament_id' => $oTournament->getTournamentId(),
                             'team_id' => $oPlayerTournament->getTeamId()
-                        ))
-                        ) {
-                            $nTeamTournament = $oTeamTournament->getId();
-                        }
+                        ));
                     }
                 }
-                $this->Cache_Set($nTeamTournament, $sKey, array("PluginVs_ModuleVs_EntityTeamTournament_save", "PluginVs_ModuleVs_EntityPlayerTournament_save"), 60 * 60 * 24 * 1);
+                $this->Cache_Set($oMyTeamTournament, $sKey, array("PluginVs_ModuleVs_EntityTeamTournament_save", "PluginVs_ModuleVs_EntityPlayerTournament_save"), 60 * 60 * 24 * 1);
             }
         }
-        return $nTeamTournament;
+        return $oMyTeamTournament;
     }
 
     public function IsTournamentAdmin($oTournament)

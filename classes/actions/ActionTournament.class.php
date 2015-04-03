@@ -30,15 +30,15 @@ class PluginVs_ActionTournament extends ActionPlugin
     /**
      * User`s team
      */
-    protected $myTeam = 0;
+    protected $nMyTeamId = 0;
     /**
      * User`s TeamTournament
      */
-    protected $myTeamTournament = 0;
+    protected $oMyTeamTournament = 0;
     /**
      * Ss tournament admin
      */
-    protected $isAdmin = null;
+    protected $bIsAdmin = false;
 
     /**
      * Init action
@@ -73,9 +73,9 @@ class PluginVs_ActionTournament extends ActionPlugin
         }
 
         $this->oGame = $this->oTournament->getGame();
-        $this->myTeamTournament = E::Module('PluginVs\Vs')->GetMyTeamTournament($this->oTournament);
-        $this->myTeam = $this->myTeamTournament->getTeamId();
-        $this->isAdmin = E::Module('PluginVs\Vs')->IsTournamentAdmin($this->oTournament);
+        $this->oMyTeamTournament = E::Module('PluginVs\Vs')->GetMyTeamTournament($this->oTournament);
+        if ($this->oMyTeamTournament) $this->nMyTeamId = $this->oMyTeamTournament->getTeamId();
+        $this->bIsAdmin = E::Module('PluginVs\Vs')->IsTournamentAdmin($this->oTournament);
 
         //$this->Viewer_AddWidget('right', 'tournamentdescription', array('plugin' => 'vs', 'oTournament' => $this->oTournament), 204);
         //$this->Viewer_AddWidget('right', 'tournamentsheduleloader', array('plugin' => 'vs', 'oTournament' => $this->oTournament, 'myteam' => $this->myTeam), 203);
@@ -84,7 +84,6 @@ class PluginVs_ActionTournament extends ActionPlugin
         E::ModuleViewer()->Assign('oGame', $this->oGame);
         E::ModuleViewer()->Assign('oTournament', $this->oTournament);
 
-        if ($this->isAdmin) E::ModuleViewer()->Assign('admin', 'yes');
 
         $this->Viewer_AddHtmlTitle($this->oTournament->getName());
 
@@ -105,8 +104,9 @@ class PluginVs_ActionTournament extends ActionPlugin
         E::ModuleViewer()->Assign('oBlog', $this->oTournament->getBlog());
         E::ModuleViewer()->Assign('oGame', $this->oGame);
         E::ModuleViewer()->Assign('tournament_id', $this->oTournament->getTournamentId());
-        E::ModuleViewer()->Assign('myteam', $this->myTeam);
-        E::ModuleViewer()->Assign('myteamtournament', $this->myTeamTournament);
+        E::ModuleViewer()->Assign('my_team_id', $this->nMyTeamId);
+        E::ModuleViewer()->Assign('oMyTeamTournament', $this->oMyTeamTournament);
+        E::ModuleViewer()->Assign('bIsAdmin', $this->bIsAdmin);
     }
 
     /**
