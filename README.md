@@ -1,4 +1,14 @@
-# Plugin Versus
+## Plugin Versus
+
+Plugin for createing leagues and tournaments on altocms 
+
+Plugin can be used for real sport leagues (univesities soccer/hockey/basketball leagues ) and for virtual tournaments 1 vs 1 or teamplay
+
+Release plans:
+- alpha - 10 may
+- beta - 1 june
+
+-----------------------------------------------------------------
 Плагин для создания различных турниров на сайте.
 
 В изначальной комплектации будут предусмотрены: футбол, хоккей, баскетбол, гонки, мма, американский футбол.
@@ -11,6 +21,6 @@
 Заявки на поддержку, заточку плагина под конкретный проект, рассматриваются по скайпу klaus-vs.
 
 Приблизительное время выхода версий:
-альфа - 10 мая
-бета - 1 июня
+- альфа - 10 мая
+- бета - 1 июня
 
