@@ -1,6 +1,6 @@
 ## Plugin Versus
 
-Plugin for createing leagues and tournaments on altocms 
+Plugin for creating leagues and tournaments on altocms 
 
 Plugin can be used for real sport leagues (univesities soccer/hockey/basketball leagues ) and for virtual tournaments 1 vs 1 or teamplay
 
