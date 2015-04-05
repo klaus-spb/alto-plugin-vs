@@ -181,6 +181,22 @@ class PluginVs_ActionTournament extends ActionPlugin
 
     protected function EventRules()
     {
+        $this->sMenuSubItemSelect = "rules";
+        $this->Viewer_AddHtmlTitle('Rules');
+
+        $oTournamentRules = E::Module('PluginVs\Vs')->GetTournamentRulesByTournamentId($this->oTournament->getTournamentId());
+        E::ModuleViewer()->Assign('oTournamentRules', $oTournamentRules);
+
+        if (R::GetParam(1) == 'edit' && $this->isAdmin) {
+            if (F::isPost('submit_topic_publish')) {
+                $oTournamentRules->setRulesSource(F::GetRequestStr('topic_text'));
+                $oTournamentRules->setRulesText(E::ModuleText()->Parser(F::GetRequestStr('topic_text')));
+                $oTournamentRules->Save();
+            }
+            $this->SetTemplateAction('tournament_rules_edit');
+        } else {
+            $this->SetTemplateAction('tournament_rules');
+        }
 
     }
 
