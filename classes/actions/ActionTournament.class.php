@@ -77,15 +77,15 @@ class PluginVs_ActionTournament extends ActionPlugin
         if ($this->oMyTeamTournament) $this->nMyTeamId = $this->oMyTeamTournament->getTeamId();
         $this->bIsAdmin = E::Module('PluginVs\Vs')->IsTournamentAdmin($this->oTournament);
 
-        //$this->Viewer_AddWidget('right', 'tournamentdescription', array('plugin' => 'vs', 'oTournament' => $this->oTournament), 204);
-        //$this->Viewer_AddWidget('right', 'tournamentsheduleloader', array('plugin' => 'vs', 'oTournament' => $this->oTournament, 'oTeamTournament' => $this->oMyTeamTournament), 203);
-        //$this->Viewer_AddWidget('right', 'tournamentteamtable', array('plugin' => 'vs', 'oTournament' => $this->oTournament), 202);
+        //E::ModuleViewer()->AddWidget('right', 'tournamentdescription', array('plugin' => 'vs', 'oTournament' => $this->oTournament), 204);
+        //E::ModuleViewer()->AddWidget('right', 'tournamentsheduleloader', array('plugin' => 'vs', 'oTournament' => $this->oTournament, 'oTeamTournament' => $this->oMyTeamTournament), 203);
+        //E::ModuleViewer()->AddWidget('right', 'tournamentteamtable', array('plugin' => 'vs', 'oTournament' => $this->oTournament), 202);
 
         E::ModuleViewer()->Assign('oGame', $this->oGame);
         E::ModuleViewer()->Assign('oTournament', $this->oTournament);
 
 
-        $this->Viewer_AddHtmlTitle($this->oTournament->getName());
+        E::ModuleViewer()->AddHtmlTitle($this->oTournament->getName());
 
     }
 
@@ -143,7 +143,7 @@ class PluginVs_ActionTournament extends ActionPlugin
          * Формируем постраничность
          */
 
-        $aPaging = $this->Viewer_MakePaging($aResult['count'], $iPage, 10, 4, $this->oTournament->getUrlFull());
+        $aPaging = E::ModuleViewer()->MakePaging($aResult['count'], $iPage, 10, 4, $this->oTournament->getUrlFull());
         /**
          * Загружаем переменные в шаблон
          */
@@ -182,7 +182,7 @@ class PluginVs_ActionTournament extends ActionPlugin
     protected function EventRules()
     {
         $this->sMenuSubItemSelect = "rules";
-        $this->Viewer_AddHtmlTitle('Rules');
+        E::ModuleViewer()->AddHtmlTitle('Rules');
 
         $oTournamentRules = E::Module('PluginVs\Vs')->GetTournamentRulesByTournamentId($this->oTournament->getTournamentId());
         E::ModuleViewer()->Assign('oTournamentRules', $oTournamentRules);
@@ -207,7 +207,16 @@ class PluginVs_ActionTournament extends ActionPlugin
 
     protected function EventAdmin()
     {
+        $this->sMenuSubItemSelect = "admin";
+        E::ModuleViewer()->AddHtmlTitle('Admin');
 
+        $this->SetTemplateAction('tournament_admin');
+
+        if ($this->isAdmin) {
+            $this->SetTemplateAction('tournament_admin');
+        } else {
+            return R::Action('error');
+        }
     }
 
     protected function EventStats()
