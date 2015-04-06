@@ -289,6 +289,19 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
                     $_REQUEST['brief'] = $oTournamentEdit->getBrief();
                     $_REQUEST['url'] = $oTournamentEdit->getUrl();
 
+                    $aAdmins = E::Module('PluginVs\Vs')->GetTournamentAdminItemsByFilter(array(
+                        'tournament_id' => $oTournamentEdit->getTournamentId(),
+                        '#with' => array('user'),
+                    ));
+
+                    $admins = array();
+                    foreach ($aAdmins as $oAdmin) {
+                        $admins[] = $oAdmin->getUser()->getLogin();
+                    }
+
+                    $_REQUEST['admins'] = implode(',', $admins);
+
+
                 } else {
                     $this->SubmitEditTournament($oTournamentEdit);
                 }
@@ -323,12 +336,45 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
          * Добавляем страницу
          */
         if ($oTournament->Add()) {
+            $this->SubmitAdmins($oTournament);
             E::ModuleMessage()->AddNotice('Ok');
             $this->SetParam(0, null);
             R::Location('admin/tournament/');
         } else {
             E::ModuleMessage()->AddError(E::ModuleLang()->Get('system_error'));
         }
+    }
+
+    protected function SubmitAdmins($oTournament)
+    {
+        if ($aAdmins = E::Module('PluginVs\Vs')->GetTournamentAdminItemsByFilter(array(
+            'tournament_id' => $oTournament->getTournamentId()
+        ))
+        ) {
+            foreach ($aAdmins as $oAdmin) {
+                $oAdmin->Delete();
+            }
+        }
+        $sUsers = F::GetRequest('admins');
+        $aUsers = explode(',', $sUsers);
+
+        foreach ($aUsers as $sUser) {
+            $sUser = trim($sUser);
+            if ($sUser == '') {
+                continue;
+            }
+            if ($oUser = E::ModuleUser()->GetUserByLogin($sUser) and $oUser->getActivate() == 1) {
+
+                $oAdmin = E::GetEntity('PluginVs_Vs_TournamentAdmin');
+                $oAdmin->setStatus('admin');
+                $oAdmin->setUserId($oUser->getUserId());
+                $oAdmin->setTournamentId($oTournament->getTournamentId());
+                $oAdmin->setExpire('2050-09-03');
+                $oAdmin->Add();
+            }
+        }
+
+
     }
 
     /**
@@ -354,7 +400,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
             $bOk = false;
         }
 
-        if (!F::CheckVal(F::GetRequest('gametype_id', null, 'post'), 'text', 1, 50000)) {
+        if (!F::CheckVal(F::GetRequest('tournament_type_id', null, 'post'), 'text', 1, 50000)) {
             E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
             $bOk = false;
         }
@@ -365,11 +411,6 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         }
 
         if (!F::CheckVal(F::GetRequest('blog_id', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('blog_url', null, 'post'), 'text', 1, 50000)) {
             E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
             $bOk = false;
         }
@@ -389,211 +430,11 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
             $bOk = false;
         }
 
-        if (!F::CheckVal(F::GetRequest('known_teams', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('league_name', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('league_pass', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('win', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('lose', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('win_o', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('lose_o', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('exist_o', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('win_b', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('lose_b', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('exist_b', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('points_n', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('penalty_stay', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('goals_teh_w', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('goals_teh_l', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('goals_teh_n', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('nichya', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('exist_n', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('zakryto', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('datestart', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('datezayavki', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('dateopenrasp', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('zavershen', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('autosubmit', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('submithours', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('prodlenie', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('waitlist_topic_id', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('prolong_topic_id', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('fond', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('vznos', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('vznos_dop', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('exist_yard', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('logo', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('topic_id', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('logo_small', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('logo_full', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('tournament_extra', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('site', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('ch_id', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
         if (!F::CheckVal(F::GetRequest('platform_id', null, 'post'), 'text', 1, 50000)) {
             E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
             $bOk = false;
         }
-
-        if (!F::CheckVal(F::GetRequest('enable_trades', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-                                                                                                                        */
+                                                                                               */
 
         E::ModuleHook()->Run('check_tournament_fields', array('bOk' => &$bOk));
 
@@ -619,6 +460,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
 
         // * Обновляем страницу
         if ($oTournamentEdit->Save()) {
+            $this->SubmitAdmins($oTournamentEdit);
             R::Location('admin/tournament/');
         } else {
             E::ModuleMessage()->AddError(E::ModuleLang()->Get('system_error'));

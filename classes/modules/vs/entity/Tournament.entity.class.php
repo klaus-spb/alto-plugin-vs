@@ -7,7 +7,8 @@ class PluginVs_ModuleVs_EntityTournament extends EntityORM
         'blog' => array(self::RELATION_TYPE_BELONGS_TO, 'ModuleBlog_EntityBlog', 'blog_id'),
         'waitlist' => array(self::RELATION_TYPE_BELONGS_TO, 'ModuleTopic_EntityTopic', 'waitlist_topic_id'),
         'prolong' => array(self::RELATION_TYPE_BELONGS_TO, 'ModuleTopic_EntityTopic', 'prolong_topic_id'),
-        'tournament_type' => array(self::RELATION_TYPE_BELONGS_TO, 'PluginVs_ModuleVs_EntityTournamentType', 'tournament_type_id')
+        'tournament_type' => array(self::RELATION_TYPE_BELONGS_TO, 'PluginVs_ModuleVs_EntityTournamentType', 'tournament_type_id'),
+        'platform' => array(self::RELATION_TYPE_BELONGS_TO, 'PluginVs_ModuleVs_EntityPlatform', 'platform_id'),
     );
     protected $aExtra = null;
 

@@ -23,17 +23,8 @@
                 <form action="" method="POST" class="form-horizontal uniform" enctype="multipart/form-data">
                     {hook run='plugin_tournament_form_add_begin'}
                     <input type="hidden" name="security_ls_key" value="{$ALTO_SECURITY_KEY}"/>
+                    <input type="hidden" name="tournament_id" value="{$_aRequest.tournament_id}"/>
 
-
-                    <div class="control-group">
-                        <label for="tournament_id" class="control-label">tournament_id</label>
-
-                        <div class="controls">
-                            <input type="text" id="tournament_id" class="input-text" name="tournament_id"
-                                   value="{if $_aRequest.tournament_id}{$_aRequest.tournament_id|strip_tags|escape:'html'}{/if}"/>
-
-                        </div>
-                    </div>
 
                     <div class="control-group">
                         <label for="game_id" class="control-label">game_id</label>
@@ -79,7 +70,7 @@
 
                         <div class="controls">
                             <select name="league_id" id="league_id">
-                                <option value="0"></option>
+                                <option value="0">-</option>
                                 {foreach from=$aLeagues item=oLeague}
                                     <option value="{$oLeague->getLeagueId()}"
                                             {if $_aRequest.game_id==$oLeague->getLeagueId()}selected{/if}>{$oLeague->getName()}</option>
