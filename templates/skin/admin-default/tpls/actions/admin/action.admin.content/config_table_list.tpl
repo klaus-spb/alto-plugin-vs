@@ -16,15 +16,10 @@
                     <thead>
                     <tr>
 
-                        <th>config_table_id</th>
                         <th>table</th>
                         <th>field_name</th>
                         <th>field_description</th>
                         <th>field_type</th>
-                        <th>value_default</th>
-                        <th>field_options</th>
-                        <th>field_sort</th>
-                        <th>field_required</th>
 
                     </tr>
                     </thead>
@@ -33,24 +28,10 @@
                     {foreach $aConfigTable as $oConfigTable}
                         <tr>
 
-                            <td>                        {$oConfigTable->getConfigTableId()}
-                            </td>
-                            <td>                        {$oConfigTable->getTable()}
-                            </td>
-                            <td>                        {$oConfigTable->getFieldName()}
-                            </td>
-                            <td>                        {$oConfigTable->getFieldDescription()}
-                            </td>
-                            <td>                        {$oConfigTable->getFieldType()}
-                            </td>
-                            <td>                        {$oConfigTable->getValueDefault()}
-                            </td>
-                            <td>                        {$oConfigTable->getFieldOptions()}
-                            </td>
-                            <td>                        {$oConfigTable->getFieldSort()}
-                            </td>
-                            <td>                        {$oConfigTable->getFieldRequired()}
-                            </td>
+                            <td>{$oConfigTable->getTable()}</td>
+                            <td>{$oConfigTable->getFieldName()}</td>
+                            <td>{$oConfigTable->getFieldDescription()}</td>
+                            <td>{$oConfigTable->getFieldType()}</td>
 
                             <td class="center">
                                 <a href="{router page='admin'}config_table/edit/{$oConfigTable->getConfigTableId()}/"

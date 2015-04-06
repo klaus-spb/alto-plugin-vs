@@ -32,7 +32,7 @@
 
                             <div class="controls">
                                 <select name="table" id="table" class="input-text input-width-300"
-                                        {if $sEvent=='fieldedit'}disabled{/if}>
+                                        {if $sMode=='edit'}disabled{/if}>
                                     {foreach from=Config::Get('plugin.vs.tables_can_be_configured') item=sTable}
                                         <option value="{$sTable}"
                                                 {if $_aRequest.table==$sTable}selected{/if}>{$sTable|escape:'html'}</option>
@@ -47,7 +47,7 @@
 
                             <div class="controls">
                                 <select name="field_type" id="field_type" onChange="selectfield(jQuery(this).val());"
-                                        class="input-text input-width-300" {if $sEvent=='fieldedit'}disabled{/if}>
+                                        class="input-text input-width-300" {if $sMode=='edit'}disabled{/if}>
                                     <option value="float" {if $_aRequest.field_type=='float'}selected{/if}
                                             title="float">
                                         Дробное
@@ -84,7 +84,7 @@
 
                             <div class="controls">
                                 <input type="text" id="field_name" name="field_name" value="{$_aRequest.field_name}"
-                                       class="input-text">
+                                       class="input-text" {if $sMode=='edit'}disabled{/if}>
                             </div>
                         </div>
 
@@ -107,7 +107,7 @@
                             <div class="controls">
                                 <input type="text" id="default_value" name="default_value"
                                        value="{$_aRequest.default_value}"
-                                       class="input-text">
+                                       class="input-text" {if $sMode=='edit'}disabled{/if}>
                             </div>
                         </div>
                         <div class="control-group">
@@ -118,7 +118,7 @@
 
                             <div class="controls">
                                 <input type="checkbox" id="null_enabled" name="null_enabled"
-                                       {if $_aRequest.null_enabled}checked{/if}/>
+                                       {if $_aRequest.null_enabled}checked{/if}{if $sMode=='edit'}disabled{/if}/>
                             </div>
                         </div>
 
@@ -131,7 +131,7 @@
 
                             <div class="controls">
                                 <textarea name="field_values" id="field_values" class="input-text"
-                                          rows="5">{$_aRequest.field_values}</textarea>
+                                          rows="5" {if $sMode=='edit'}disabled{/if}>{$_aRequest.field_values}</textarea>
                             </div>
                         </div>
 
@@ -150,7 +150,7 @@
                         {hook run='plugin_config_table_form_add_end'}
                         <div class="form-actions">
                             <button id="submit_config_table_save" type="submit" class="btn btn-primary"
-                                    name="submit_config_table_save" disabled>Save
+                                    name="submit_config_table_save" {if $sMode!='edit'}disabled{/if}>Save
                             </button>
                         </div>
 
@@ -159,12 +159,15 @@
         </div>
 
     </div>
-{literal}
     <script>
+        {if $sMode!='edit'}
+        {literal}
         $('#field_name').on('input', function () {
             check_field();
         });
-
+        {/literal}
+        {/if}
+        {literal}
         function check_field() {
 
             $('#submit_config_table_save').enable(false);
@@ -187,13 +190,13 @@
             //для типа выпадающий список
             if (f == 'enum') {
                 $('#enum_inputval').css({'display': 'block'});
-            }
+                }
 
             if (f == 'float' || f == 'varchar') {
                 $('#field_size').css({'display': 'block'});
             }
             return false;
-        }
+            }
+        {/literal}
     </script>
-{/literal}
 {/block}

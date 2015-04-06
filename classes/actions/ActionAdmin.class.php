@@ -178,12 +178,9 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         if (!$this->CheckConfigTableFields()) {
             return;
         }
-        $oConfigTableEdit->setConfigTableId(F::GetRequest('config_table_id'));
-        $oConfigTableEdit->setTable(F::GetRequest('table'));
-        $oConfigTableEdit->setFieldName(F::GetRequest('field_name'));
+
         $oConfigTableEdit->setFieldDescription(F::GetRequest('field_description'));
-        $oConfigTableEdit->setFieldType(F::GetRequest('field_type'));
-        $oConfigTableEdit->setFieldOptions(F::GetRequest('field_options'));
+
 
         // * Обновляем страницу
         if ($oConfigTableEdit->Save()) {
@@ -261,6 +258,19 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         $this->SetTemplateAction('content/tournament_edit');
         E::ModuleViewer()->Assign('sMode', $sMode);
 
+        $aGames = E::Module('PluginVs\Vs')->GetGameItemsAll();
+        $aTournamentTypes = E::Module('PluginVs\Vs')->GetTournamentTypeItemsAll();
+        $aPlatforms = E::Module('PluginVs\Vs')->GetPlatformItemsAll();
+        $aLeagues = E::Module('PluginVs\Vs')->GetLeagueItemsAll();
+
+        E::ModuleViewer()->Assign('aGames', $aGames);
+        E::ModuleViewer()->Assign('aTournamentTypes', $aTournamentTypes);
+        E::ModuleViewer()->Assign('aPlatforms', $aPlatforms);
+        E::ModuleViewer()->Assign('aLeagues', $aLeagues);
+
+        $aResult = $this->Blog_GetBlogsByFilter(array('exclude_type' => 'personal'), array('blog_title' => 'asc'), 1, 500);
+        $this->Viewer_Assign('aBlogs', $aResult['collection']);
+
         if ($this->GetParam(0) == 'add' && F::isPost('submit_tournament_save')) {
             $this->SubmitAddTournament();
         }
@@ -271,54 +281,13 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
 
                     $_REQUEST['tournament_id'] = $oTournamentEdit->getTournamentId();
                     $_REQUEST['game_id'] = $oTournamentEdit->getGameId();
-                    $_REQUEST['gametype_id'] = $oTournamentEdit->getGametypeId();
+                    $_REQUEST['platform_id'] = $oTournamentEdit->getPlatformId();
+                    $_REQUEST['tournament_type_id'] = $oTournamentEdit->getTournamentTypeId();
                     $_REQUEST['league_id'] = $oTournamentEdit->getLeagueId();
                     $_REQUEST['blog_id'] = $oTournamentEdit->getBlogId();
-                    $_REQUEST['blog_url'] = $oTournamentEdit->getBlogUrl();
                     $_REQUEST['name'] = $oTournamentEdit->getName();
                     $_REQUEST['brief'] = $oTournamentEdit->getBrief();
                     $_REQUEST['url'] = $oTournamentEdit->getUrl();
-                    $_REQUEST['known_teams'] = $oTournamentEdit->getKnownTeams();
-                    $_REQUEST['league_name'] = $oTournamentEdit->getLeagueName();
-                    $_REQUEST['league_pass'] = $oTournamentEdit->getLeaguePass();
-                    $_REQUEST['win'] = $oTournamentEdit->getWin();
-                    $_REQUEST['lose'] = $oTournamentEdit->getLose();
-                    $_REQUEST['win_o'] = $oTournamentEdit->getWinO();
-                    $_REQUEST['lose_o'] = $oTournamentEdit->getLoseO();
-                    $_REQUEST['exist_o'] = $oTournamentEdit->getExistO();
-                    $_REQUEST['win_b'] = $oTournamentEdit->getWinB();
-                    $_REQUEST['lose_b'] = $oTournamentEdit->getLoseB();
-                    $_REQUEST['exist_b'] = $oTournamentEdit->getExistB();
-                    $_REQUEST['points_n'] = $oTournamentEdit->getPointsN();
-                    $_REQUEST['penalty_stay'] = $oTournamentEdit->getPenaltyStay();
-                    $_REQUEST['goals_teh_w'] = $oTournamentEdit->getGoalsTehW();
-                    $_REQUEST['goals_teh_l'] = $oTournamentEdit->getGoalsTehL();
-                    $_REQUEST['goals_teh_n'] = $oTournamentEdit->getGoalsTehN();
-                    $_REQUEST['nichya'] = $oTournamentEdit->getNichya();
-                    $_REQUEST['exist_n'] = $oTournamentEdit->getExistN();
-                    $_REQUEST['zakryto'] = $oTournamentEdit->getZakryto();
-                    $_REQUEST['datestart'] = $oTournamentEdit->getDatestart();
-                    $_REQUEST['datezayavki'] = $oTournamentEdit->getDatezayavki();
-                    $_REQUEST['dateopenrasp'] = $oTournamentEdit->getDateopenrasp();
-                    $_REQUEST['zavershen'] = $oTournamentEdit->getZavershen();
-                    $_REQUEST['autosubmit'] = $oTournamentEdit->getAutosubmit();
-                    $_REQUEST['submithours'] = $oTournamentEdit->getSubmithours();
-                    $_REQUEST['prodlenie'] = $oTournamentEdit->getProdlenie();
-                    $_REQUEST['waitlist_topic_id'] = $oTournamentEdit->getWaitlistTopicId();
-                    $_REQUEST['prolong_topic_id'] = $oTournamentEdit->getProlongTopicId();
-                    $_REQUEST['fond'] = $oTournamentEdit->getFond();
-                    $_REQUEST['vznos'] = $oTournamentEdit->getVznos();
-                    $_REQUEST['vznos_dop'] = $oTournamentEdit->getVznosDop();
-                    $_REQUEST['exist_yard'] = $oTournamentEdit->getExistYard();
-                    $_REQUEST['logo'] = $oTournamentEdit->getLogo();
-                    $_REQUEST['topic_id'] = $oTournamentEdit->getTopicId();
-                    $_REQUEST['logo_small'] = $oTournamentEdit->getLogoSmall();
-                    $_REQUEST['logo_full'] = $oTournamentEdit->getLogoFull();
-                    $_REQUEST['tournament_extra'] = $oTournamentEdit->getTournamentExtra();
-                    $_REQUEST['site'] = $oTournamentEdit->getSite();
-                    $_REQUEST['ch_id'] = $oTournamentEdit->getChId();
-                    $_REQUEST['platform_id'] = $oTournamentEdit->getPlatformId();
-                    $_REQUEST['enable_trades'] = $oTournamentEdit->getEnableTrades();
 
                 } else {
                     $this->SubmitEditTournament($oTournamentEdit);
@@ -342,54 +311,13 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         $oTournament = E::GetEntity('PluginVs_ModuleVs_EntityTournament');
         $oTournament->setTournamentId(F::GetRequest('tournament_id'));
         $oTournament->setGameId(F::GetRequest('game_id'));
-        $oTournament->setGametypeId(F::GetRequest('gametype_id'));
+        $oTournament->setPlatformId(F::GetRequest('platform_id'));
+        $oTournament->setTournamentTypeId(F::GetRequest('tournament_type_id'));
         $oTournament->setLeagueId(F::GetRequest('league_id'));
         $oTournament->setBlogId(F::GetRequest('blog_id'));
-        $oTournament->setBlogUrl(F::GetRequest('blog_url'));
         $oTournament->setName(F::GetRequest('name'));
         $oTournament->setBrief(F::GetRequest('brief'));
         $oTournament->setUrl(F::GetRequest('url'));
-        $oTournament->setKnownTeams(F::GetRequest('known_teams'));
-        $oTournament->setLeagueName(F::GetRequest('league_name'));
-        $oTournament->setLeaguePass(F::GetRequest('league_pass'));
-        $oTournament->setWin(F::GetRequest('win'));
-        $oTournament->setLose(F::GetRequest('lose'));
-        $oTournament->setWinO(F::GetRequest('win_o'));
-        $oTournament->setLoseO(F::GetRequest('lose_o'));
-        $oTournament->setExistO(F::GetRequest('exist_o'));
-        $oTournament->setWinB(F::GetRequest('win_b'));
-        $oTournament->setLoseB(F::GetRequest('lose_b'));
-        $oTournament->setExistB(F::GetRequest('exist_b'));
-        $oTournament->setPointsN(F::GetRequest('points_n'));
-        $oTournament->setPenaltyStay(F::GetRequest('penalty_stay'));
-        $oTournament->setGoalsTehW(F::GetRequest('goals_teh_w'));
-        $oTournament->setGoalsTehL(F::GetRequest('goals_teh_l'));
-        $oTournament->setGoalsTehN(F::GetRequest('goals_teh_n'));
-        $oTournament->setNichya(F::GetRequest('nichya'));
-        $oTournament->setExistN(F::GetRequest('exist_n'));
-        $oTournament->setZakryto(F::GetRequest('zakryto'));
-        $oTournament->setDatestart(F::GetRequest('datestart'));
-        $oTournament->setDatezayavki(F::GetRequest('datezayavki'));
-        $oTournament->setDateopenrasp(F::GetRequest('dateopenrasp'));
-        $oTournament->setZavershen(F::GetRequest('zavershen'));
-        $oTournament->setAutosubmit(F::GetRequest('autosubmit'));
-        $oTournament->setSubmithours(F::GetRequest('submithours'));
-        $oTournament->setProdlenie(F::GetRequest('prodlenie'));
-        $oTournament->setWaitlistTopicId(F::GetRequest('waitlist_topic_id'));
-        $oTournament->setProlongTopicId(F::GetRequest('prolong_topic_id'));
-        $oTournament->setFond(F::GetRequest('fond'));
-        $oTournament->setVznos(F::GetRequest('vznos'));
-        $oTournament->setVznosDop(F::GetRequest('vznos_dop'));
-        $oTournament->setExistYard(F::GetRequest('exist_yard'));
-        $oTournament->setLogo(F::GetRequest('logo'));
-        $oTournament->setTopicId(F::GetRequest('topic_id'));
-        $oTournament->setLogoSmall(F::GetRequest('logo_small'));
-        $oTournament->setLogoFull(F::GetRequest('logo_full'));
-        $oTournament->setTournamentExtra(F::GetRequest('tournament_extra'));
-        $oTournament->setSite(F::GetRequest('site'));
-        $oTournament->setChId(F::GetRequest('ch_id'));
-        $oTournament->setPlatformId(F::GetRequest('platform_id'));
-        $oTournament->setEnableTrades(F::GetRequest('enable_trades'));
 
         /**
          * Добавляем страницу
@@ -681,54 +609,13 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         }
         $oTournamentEdit->setTournamentId(F::GetRequest('tournament_id'));
         $oTournamentEdit->setGameId(F::GetRequest('game_id'));
-        $oTournamentEdit->setGametypeId(F::GetRequest('gametype_id'));
+        $oTournamentEdit->setPlatformId(F::GetRequest('platform_id'));
+        $oTournamentEdit->setTournamentTypeId(F::GetRequest('tournament_type_id'));
         $oTournamentEdit->setLeagueId(F::GetRequest('league_id'));
         $oTournamentEdit->setBlogId(F::GetRequest('blog_id'));
-        $oTournamentEdit->setBlogUrl(F::GetRequest('blog_url'));
         $oTournamentEdit->setName(F::GetRequest('name'));
         $oTournamentEdit->setBrief(F::GetRequest('brief'));
         $oTournamentEdit->setUrl(F::GetRequest('url'));
-        $oTournamentEdit->setKnownTeams(F::GetRequest('known_teams'));
-        $oTournamentEdit->setLeagueName(F::GetRequest('league_name'));
-        $oTournamentEdit->setLeaguePass(F::GetRequest('league_pass'));
-        $oTournamentEdit->setWin(F::GetRequest('win'));
-        $oTournamentEdit->setLose(F::GetRequest('lose'));
-        $oTournamentEdit->setWinO(F::GetRequest('win_o'));
-        $oTournamentEdit->setLoseO(F::GetRequest('lose_o'));
-        $oTournamentEdit->setExistO(F::GetRequest('exist_o'));
-        $oTournamentEdit->setWinB(F::GetRequest('win_b'));
-        $oTournamentEdit->setLoseB(F::GetRequest('lose_b'));
-        $oTournamentEdit->setExistB(F::GetRequest('exist_b'));
-        $oTournamentEdit->setPointsN(F::GetRequest('points_n'));
-        $oTournamentEdit->setPenaltyStay(F::GetRequest('penalty_stay'));
-        $oTournamentEdit->setGoalsTehW(F::GetRequest('goals_teh_w'));
-        $oTournamentEdit->setGoalsTehL(F::GetRequest('goals_teh_l'));
-        $oTournamentEdit->setGoalsTehN(F::GetRequest('goals_teh_n'));
-        $oTournamentEdit->setNichya(F::GetRequest('nichya'));
-        $oTournamentEdit->setExistN(F::GetRequest('exist_n'));
-        $oTournamentEdit->setZakryto(F::GetRequest('zakryto'));
-        $oTournamentEdit->setDatestart(F::GetRequest('datestart'));
-        $oTournamentEdit->setDatezayavki(F::GetRequest('datezayavki'));
-        $oTournamentEdit->setDateopenrasp(F::GetRequest('dateopenrasp'));
-        $oTournamentEdit->setZavershen(F::GetRequest('zavershen'));
-        $oTournamentEdit->setAutosubmit(F::GetRequest('autosubmit'));
-        $oTournamentEdit->setSubmithours(F::GetRequest('submithours'));
-        $oTournamentEdit->setProdlenie(F::GetRequest('prodlenie'));
-        $oTournamentEdit->setWaitlistTopicId(F::GetRequest('waitlist_topic_id'));
-        $oTournamentEdit->setProlongTopicId(F::GetRequest('prolong_topic_id'));
-        $oTournamentEdit->setFond(F::GetRequest('fond'));
-        $oTournamentEdit->setVznos(F::GetRequest('vznos'));
-        $oTournamentEdit->setVznosDop(F::GetRequest('vznos_dop'));
-        $oTournamentEdit->setExistYard(F::GetRequest('exist_yard'));
-        $oTournamentEdit->setLogo(F::GetRequest('logo'));
-        $oTournamentEdit->setTopicId(F::GetRequest('topic_id'));
-        $oTournamentEdit->setLogoSmall(F::GetRequest('logo_small'));
-        $oTournamentEdit->setLogoFull(F::GetRequest('logo_full'));
-        $oTournamentEdit->setTournamentExtra(F::GetRequest('tournament_extra'));
-        $oTournamentEdit->setSite(F::GetRequest('site'));
-        $oTournamentEdit->setChId(F::GetRequest('ch_id'));
-        $oTournamentEdit->setPlatformId(F::GetRequest('platform_id'));
-        $oTournamentEdit->setEnableTrades(F::GetRequest('enable_trades'));
 
         // * Обновляем страницу
         if ($oTournamentEdit->Save()) {
