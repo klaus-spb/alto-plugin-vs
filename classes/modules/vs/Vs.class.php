@@ -18,6 +18,13 @@ class PluginVs_ModuleVs extends ModuleORM
         $this->oUserCurrent = E::ModuleUser()->GetUserCurrent();
     }
 
+    public function ShowColumnsFromTable($sTableName)
+    {
+        $data = $this->oMapper->ShowColumnsFromTable($sTableName);
+
+        return $data;
+    }
+
     public function GetMyTeamTournament($oTournament)
     {
         $oMyTeamTournament = null;

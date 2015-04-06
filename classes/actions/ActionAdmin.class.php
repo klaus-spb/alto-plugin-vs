@@ -9,9 +9,256 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
     {
         parent::RegisterEvent();
 
+        $this->AddEventPreg('/^ajax$/i', '/^check_field$/i', 'EventAjaxCheckField');
+
         $this->AddEvent('tournament', 'EventTournament');
+        $this->AddEvent('config_table', 'EventConfigTable');
 
     }
+
+    public function EventAjaxCheckField()
+    {
+
+        // * Устанавливаем формат ответа
+        E::ModuleViewer()->SetResponseAjax('json');
+
+        $sTableName = Config::Get('db.table.prefix') . 'vs_' . F::StrUnderscore($this->GetPost('table'));
+        $sFieldName = F::StrUnderscore($this->GetPost('field'));
+
+        $aFields = E::Module('PluginVs\Vs')->ShowColumnsFromTable($sTableName);
+
+        if (in_array($sFieldName, $aFields)) {
+            E::ModuleMessage()->AddErrorSingle('such field exists', E::ModuleLang()->Get('attention'));
+            return;
+        }
+
+    }
+
+    /***********************************ConfigTable************************************/
+
+    protected function EventConfigTable()
+    {
+
+        $this->sMainMenuItem = 'content';
+
+        if ($this->GetParam(0) == 'add') {
+            $this->_eventConfigTableEdit('add');
+        } elseif ($this->GetParam(0) == 'edit') {
+            $this->_eventConfigTableEdit('edit');
+        } elseif ($this->GetParam(0) == 'delete') {
+            $this->_eventConfigTableDelete();
+        } else {
+            $this->_eventConfigTableList();
+        }
+    }
+
+    protected function _eventConfigTableList()
+    {
+
+        $this->_setTitle('ConfigTable');
+
+        $nPage = $this->_getPageNum();
+        $aConfigTable = E::Module('PluginVs\Vs')->GetConfigTableItemsByFilter(
+            array(
+                '#page' => 1,
+                '#limit' => array(($nPage - 1) * Config::Get('admin.items_per_page'),
+                    Config::Get('admin.items_per_page'))
+            )
+        );
+        $aPaging = $this->Viewer_MakePaging(
+            $aConfigTable['count'], $nPage, Config::Get('admin.items_per_page'), 4,
+            Router::GetPath('admin') . 'config_table/'
+        );
+
+        E::ModuleViewer()->Assign('aConfigTable', $aConfigTable['collection']);
+        E::ModuleViewer()->Assign('aPaging', $aPaging);
+
+
+        $this->SetTemplateAction('content/config_table_list');
+    }
+
+    protected function _eventConfigTableDelete()
+    {
+
+        if ($oConfigTable = E::Module('PluginVs\Vs')->GetConfigTableByConfigTableId($this->GetParam(1))) {
+            $oConfigTable->Delete();
+            $this->Message_AddNotice('Deleted', true);
+            R::Location('admin/config_table/');
+        } else {
+            $this->Message_AddError(
+                'Something wrong', $this->Lang_Get('error')
+            );
+        }
+
+    }
+
+    protected function _eventConfigTableEdit($sMode)
+    {
+
+        $this->_setTitle('ConfigTable ' . $this->GetParam(1));
+        $this->SetTemplateAction('content/config_table_edit');
+        E::ModuleViewer()->Assign('sMode', $sMode);
+
+        if ($this->GetParam(0) == 'add' && F::isPost('submit_config_table_save')) {
+            $this->SubmitAddConfigTable();
+        }
+
+        if ($this->GetParam(0) == 'edit') {
+            if ($oConfigTableEdit = E::Module('PluginVs\Vs')->GetConfigTableByConfigTableId($this->GetParam(1))) {
+                if (!F::isPost('submit_config_table_save')) {
+                    $_REQUEST['config_table_id'] = $oConfigTableEdit->getConfigTableId();
+                    $_REQUEST['table'] = $oConfigTableEdit->getTable();
+                    $_REQUEST['field_name'] = $oConfigTableEdit->getFieldName();
+                    $_REQUEST['field_description'] = $oConfigTableEdit->getFieldDescription();
+                    $_REQUEST['field_type'] = $oConfigTableEdit->getFieldType();
+                    $_REQUEST['field_size'] = $oConfigTableEdit->getFieldSize();
+                    $_REQUEST['value_default'] = $oConfigTableEdit->getValueDefault();
+                    $_REQUEST['field_options'] = $oConfigTableEdit->getFieldOptions();
+                    $_REQUEST['field_sort'] = $oConfigTableEdit->getFieldSort();
+                    $_REQUEST['field_required'] = $oConfigTableEdit->getFieldRequired();
+
+                } else {
+                    $this->SubmitEditConfigTable($oConfigTableEdit);
+                }
+                E::ModuleViewer()->Assign('oConfigTableEdit', $oConfigTableEdit);
+            } else {
+                E::ModuleMessage()->AddError('No such ConfigTable', E::ModuleLang()->Get('error'));
+                $this->SetParam(0, null);
+            }
+        }
+    }
+
+
+    protected function SubmitEditConfigTable($oConfigTableEdit)
+    {
+
+        // * Проверяем корректность полей
+        if (!$this->CheckConfigTableFields()) {
+            return;
+        }
+        $oConfigTableEdit->setConfigTableId(F::GetRequest('config_table_id'));
+        $oConfigTableEdit->setTable(F::GetRequest('table'));
+        $oConfigTableEdit->setFieldName(F::GetRequest('field_name'));
+        $oConfigTableEdit->setFieldDescription(F::GetRequest('field_description'));
+        $oConfigTableEdit->setFieldType(F::GetRequest('field_type'));
+        $oConfigTableEdit->setFieldSize(F::GetRequest('field_size'));
+        $oConfigTableEdit->setValueDefault(F::GetRequest('value_default'));
+        $oConfigTableEdit->setFieldOptions(F::GetRequest('field_options'));
+        $oConfigTableEdit->setFieldSort(F::GetRequest('field_sort'));
+        $oConfigTableEdit->setFieldRequired(F::GetRequest('field_required'));
+
+        // * Обновляем страницу
+        if ($oConfigTableEdit->Save()) {
+            R::Location('admin/config_table/');
+        } else {
+            E::ModuleMessage()->AddError(E::ModuleLang()->Get('system_error'));
+        }
+    }
+
+
+    protected function SubmitAddConfigTable()
+    {
+
+        // * Проверяем корректность полей
+        if (!$this->CheckConfigTableFields()) {
+            return;
+        }
+        // * Заполняем свойства
+        $oConfigTable = E::GetEntity('PluginVs_ModuleVs_EntityConfigTable');
+        $oConfigTable->setConfigTableId(F::GetRequest('config_table_id'));
+        $oConfigTable->setTable(F::GetRequest('table'));
+        $oConfigTable->setFieldName(F::GetRequest('field_name'));
+        $oConfigTable->setFieldDescription(F::GetRequest('field_description'));
+        $oConfigTable->setFieldType(F::GetRequest('field_type'));
+        $oConfigTable->setFieldSize(F::GetRequest('field_size'));
+        $oConfigTable->setValueDefault(F::GetRequest('value_default'));
+        $oConfigTable->setFieldOptions(F::GetRequest('field_options'));
+        $oConfigTable->setFieldSort(F::GetRequest('field_sort'));
+        $oConfigTable->setFieldRequired(F::GetRequest('field_required'));
+
+        /**
+         * Добавляем страницу
+         */
+        if ($oConfigTable->Add()) {
+            E::ModuleMessage()->AddNotice('Ok');
+            $this->SetParam(0, null);
+            R::Location('admin/config_table/');
+        } else {
+            E::ModuleMessage()->AddError(E::ModuleLang()->Get('system_error'));
+        }
+    }
+
+    /**
+     * Проверка полей на корректность
+     *
+     * @return bool
+     */
+    protected function CheckConfigTableFields()
+    {
+
+        E::ModuleSecurity()->ValidateSendForm();
+
+        $bOk = true;
+        /*
+
+        if (!F::CheckVal(F::GetRequest('config_table_id', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+
+        if (!F::CheckVal(F::GetRequest('table', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+
+        if (!F::CheckVal(F::GetRequest('field_name', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+
+        if (!F::CheckVal(F::GetRequest('field_description', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+
+        if (!F::CheckVal(F::GetRequest('field_type', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+
+        if (!F::CheckVal(F::GetRequest('field_size', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+
+        if (!F::CheckVal(F::GetRequest('value_default', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+
+        if (!F::CheckVal(F::GetRequest('field_options', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+
+        if (!F::CheckVal(F::GetRequest('field_sort', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+
+        if (!F::CheckVal(F::GetRequest('field_required', null, 'post'), 'text', 1, 50000)) {
+            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
+            $bOk = false;
+        }
+                        */
+
+        E::ModuleHook()->Run('check_config_table_fields', array('bOk' => &$bOk));
+
+        return $bOk;
+    }
+
+
+    /***********************************ConfigTable************************************/
 
     /***********************************Tournament************************************/
 
