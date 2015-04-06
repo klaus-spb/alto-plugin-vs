@@ -2,6 +2,8 @@
 
 class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
 {
+
+
     /**
      * Регистрация евентов
      */
@@ -22,12 +24,10 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         // * Устанавливаем формат ответа
         E::ModuleViewer()->SetResponseAjax('json');
 
-        $sTableName = Config::Get('db.table.prefix') . 'vs_' . F::StrUnderscore($this->GetPost('table'));
+        $sTableName = 'prefix_vs_' . F::StrUnderscore($this->GetPost('table'));
         $sFieldName = F::StrUnderscore($this->GetPost('field'));
 
-        $aFields = E::Module('PluginVs\Vs')->ShowColumnsFromTable($sTableName);
-
-        if (in_array($sFieldName, $aFields)) {
+        if (E::ModuleDatabase()->isFieldExists($sTableName, $sFieldName)) {
             E::ModuleMessage()->AddErrorSingle('such field exists', E::ModuleLang()->Get('attention'));
             return;
         }
@@ -52,46 +52,6 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         }
     }
 
-    protected function _eventConfigTableList()
-    {
-
-        $this->_setTitle('ConfigTable');
-
-        $nPage = $this->_getPageNum();
-        $aConfigTable = E::Module('PluginVs\Vs')->GetConfigTableItemsByFilter(
-            array(
-                '#page' => 1,
-                '#limit' => array(($nPage - 1) * Config::Get('admin.items_per_page'),
-                    Config::Get('admin.items_per_page'))
-            )
-        );
-        $aPaging = $this->Viewer_MakePaging(
-            $aConfigTable['count'], $nPage, Config::Get('admin.items_per_page'), 4,
-            Router::GetPath('admin') . 'config_table/'
-        );
-
-        E::ModuleViewer()->Assign('aConfigTable', $aConfigTable['collection']);
-        E::ModuleViewer()->Assign('aPaging', $aPaging);
-
-
-        $this->SetTemplateAction('content/config_table_list');
-    }
-
-    protected function _eventConfigTableDelete()
-    {
-
-        if ($oConfigTable = E::Module('PluginVs\Vs')->GetConfigTableByConfigTableId($this->GetParam(1))) {
-            $oConfigTable->Delete();
-            $this->Message_AddNotice('Deleted', true);
-            R::Location('admin/config_table/');
-        } else {
-            $this->Message_AddError(
-                'Something wrong', $this->Lang_Get('error')
-            );
-        }
-
-    }
-
     protected function _eventConfigTableEdit($sMode)
     {
 
@@ -111,11 +71,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
                     $_REQUEST['field_name'] = $oConfigTableEdit->getFieldName();
                     $_REQUEST['field_description'] = $oConfigTableEdit->getFieldDescription();
                     $_REQUEST['field_type'] = $oConfigTableEdit->getFieldType();
-                    $_REQUEST['field_size'] = $oConfigTableEdit->getFieldSize();
-                    $_REQUEST['value_default'] = $oConfigTableEdit->getValueDefault();
                     $_REQUEST['field_options'] = $oConfigTableEdit->getFieldOptions();
-                    $_REQUEST['field_sort'] = $oConfigTableEdit->getFieldSort();
-                    $_REQUEST['field_required'] = $oConfigTableEdit->getFieldRequired();
 
                 } else {
                     $this->SubmitEditConfigTable($oConfigTableEdit);
@@ -128,34 +84,6 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         }
     }
 
-
-    protected function SubmitEditConfigTable($oConfigTableEdit)
-    {
-
-        // * Проверяем корректность полей
-        if (!$this->CheckConfigTableFields()) {
-            return;
-        }
-        $oConfigTableEdit->setConfigTableId(F::GetRequest('config_table_id'));
-        $oConfigTableEdit->setTable(F::GetRequest('table'));
-        $oConfigTableEdit->setFieldName(F::GetRequest('field_name'));
-        $oConfigTableEdit->setFieldDescription(F::GetRequest('field_description'));
-        $oConfigTableEdit->setFieldType(F::GetRequest('field_type'));
-        $oConfigTableEdit->setFieldSize(F::GetRequest('field_size'));
-        $oConfigTableEdit->setValueDefault(F::GetRequest('value_default'));
-        $oConfigTableEdit->setFieldOptions(F::GetRequest('field_options'));
-        $oConfigTableEdit->setFieldSort(F::GetRequest('field_sort'));
-        $oConfigTableEdit->setFieldRequired(F::GetRequest('field_required'));
-
-        // * Обновляем страницу
-        if ($oConfigTableEdit->Save()) {
-            R::Location('admin/config_table/');
-        } else {
-            E::ModuleMessage()->AddError(E::ModuleLang()->Get('system_error'));
-        }
-    }
-
-
     protected function SubmitAddConfigTable()
     {
 
@@ -163,23 +91,29 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         if (!$this->CheckConfigTableFields()) {
             return;
         }
-        // * Заполняем свойства
-        $oConfigTable = E::GetEntity('PluginVs_ModuleVs_EntityConfigTable');
-        $oConfigTable->setConfigTableId(F::GetRequest('config_table_id'));
-        $oConfigTable->setTable(F::GetRequest('table'));
-        $oConfigTable->setFieldName(F::GetRequest('field_name'));
-        $oConfigTable->setFieldDescription(F::GetRequest('field_description'));
-        $oConfigTable->setFieldType(F::GetRequest('field_type'));
-        $oConfigTable->setFieldSize(F::GetRequest('field_size'));
-        $oConfigTable->setValueDefault(F::GetRequest('value_default'));
-        $oConfigTable->setFieldOptions(F::GetRequest('field_options'));
-        $oConfigTable->setFieldSort(F::GetRequest('field_sort'));
-        $oConfigTable->setFieldRequired(F::GetRequest('field_required'));
+        $sTableName = 'prefix_vs_' . F::StrUnderscore(F::GetRequest('table'));
+        $sFieldName = F::StrUnderscore(F::GetRequest('field_name'));
 
+        if (!E::ModuleDatabase()->isFieldExists($sTableName, $sFieldName)) {
+
+            // * Заполняем свойства
+            $oConfigTable = E::GetEntity('PluginVs_ModuleVs_EntityConfigTable');
+            $oConfigTable->setConfigTableId(F::GetRequest('config_table_id'));
+            $oConfigTable->setTable(F::GetRequest('table'));
+            $oConfigTable->setFieldName(F::GetRequest('field_name'));
+            $oConfigTable->setFieldDescription(F::GetRequest('field_description'));
+            $oConfigTable->setFieldType(F::GetRequest('field_type'));
+            $oConfigTable->setFieldOptions(F::GetRequest('field_options'));
+            $oConfigTable->setDefaultValue(F::GetRequest('default_value'));
+            $oConfigTable->setNullEnabled(F::GetRequest('null_enabled') ? 1 : 0);
+        }
+        $sFieldType = Config::Get('plugin.vs.field_types')[F::GetRequest('field_type')];
         /**
          * Добавляем страницу
          */
         if ($oConfigTable->Add()) {
+            E::ModuleDatabase()->AddField($sTableName, $sFieldName, $sFieldType, F::GetRequest('default_value'), F::GetRequest('null_enabled') ? 1 : 0, $sAdditional = '', $aConfig = null);
+
             E::ModuleMessage()->AddNotice('Ok');
             $this->SetParam(0, null);
             R::Location('admin/config_table/');
@@ -226,27 +160,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
             $bOk = false;
         }
 
-        if (!F::CheckVal(F::GetRequest('field_size', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('value_default', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
         if (!F::CheckVal(F::GetRequest('field_options', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('field_sort', null, 'post'), 'text', 1, 50000)) {
-            E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
-            $bOk = false;
-        }
-
-        if (!F::CheckVal(F::GetRequest('field_required', null, 'post'), 'text', 1, 50000)) {
             E::ModuleMessage()->AddError('Panic', E::ModuleLang()->Get('error'));
             $bOk = false;
         }
@@ -255,6 +169,68 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         E::ModuleHook()->Run('check_config_table_fields', array('bOk' => &$bOk));
 
         return $bOk;
+    }
+
+    protected function SubmitEditConfigTable($oConfigTableEdit)
+    {
+
+        // * Проверяем корректность полей
+        if (!$this->CheckConfigTableFields()) {
+            return;
+        }
+        $oConfigTableEdit->setConfigTableId(F::GetRequest('config_table_id'));
+        $oConfigTableEdit->setTable(F::GetRequest('table'));
+        $oConfigTableEdit->setFieldName(F::GetRequest('field_name'));
+        $oConfigTableEdit->setFieldDescription(F::GetRequest('field_description'));
+        $oConfigTableEdit->setFieldType(F::GetRequest('field_type'));
+        $oConfigTableEdit->setFieldOptions(F::GetRequest('field_options'));
+
+        // * Обновляем страницу
+        if ($oConfigTableEdit->Save()) {
+            R::Location('admin/config_table/');
+        } else {
+            E::ModuleMessage()->AddError(E::ModuleLang()->Get('system_error'));
+        }
+    }
+
+    protected function _eventConfigTableDelete()
+    {
+
+        if ($oConfigTable = E::Module('PluginVs\Vs')->GetConfigTableByConfigTableId($this->GetParam(1))) {
+            $oConfigTable->Delete();
+            $this->Message_AddNotice('Deleted', true);
+            R::Location('admin/config_table/');
+        } else {
+            $this->Message_AddError(
+                'Something wrong', $this->Lang_Get('error')
+            );
+        }
+
+    }
+
+    protected function _eventConfigTableList()
+    {
+
+        $this->_setTitle('ConfigTable');
+
+        $nPage = $this->_getPageNum();
+        $aConfigTable = E::Module('PluginVs\Vs')->GetConfigTableItemsByFilter(
+            array(
+                '#page' => 1,
+                '#limit' => array(($nPage - 1) * Config::Get('admin.items_per_page'),
+                    Config::Get('admin.items_per_page'))
+            )
+        );
+        $aPaging = $this->Viewer_MakePaging(
+            $aConfigTable['count'], $nPage, Config::Get('admin.items_per_page'), 4,
+            Router::GetPath('admin') . 'config_table/'
+        );
+
+        E::ModuleViewer()->Assign('aConfigTable', $aConfigTable['collection']);
+        E::ModuleViewer()->Assign('aPaging', $aPaging);
+
+
+        $this->SetTemplateAction('content/config_table_list');
     }
 
 

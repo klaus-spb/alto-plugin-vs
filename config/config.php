@@ -15,4 +15,13 @@ $config = array();
 
 $config['tables_can_be_configured'] = array('tournament', 'player_card', 'tournament_stat', 'player_stat');
 
+$config['field_types'] = array(
+    'tinyint' => 'tinyint(1)',
+    'int' => 'int(11)',
+    'float' => 'float(7,3)',
+    'varchar' => 'int(255)',
+    'date' => 'date',
+    'datetime' => 'datetime',
+);
+
 return $config;

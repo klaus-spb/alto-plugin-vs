@@ -62,7 +62,7 @@
                                     <option value="varchar" {if $_aRequest.field_type=='varchar'}selected{/if}
                                             title="varchar">
                                         {$aLang.action.admin.contenttypes_field_textarea}</option>
-                                    <option value="select" {if $_aRequest.field_type=='select'}selected{/if}
+                                    <option value="enum" {if $_aRequest.field_type=='enum'}selected{/if}
                                             title="{$aLang.action.admin.contenttypes_field_select_notice}">
                                         {$aLang.action.admin.contenttypes_field_select}</option>
                                     <option value="date" {if $_aRequest.field_type=='date'}selected{/if}
@@ -99,9 +99,32 @@
                             </div>
                         </div>
 
+                        <div class="control-group">
+                            <label for="default_value" class="control-label">
+                                Default value:
+                            </label>
+
+                            <div class="controls">
+                                <input type="text" id="default_value" name="default_value"
+                                       value="{$_aRequest.default_value}"
+                                       class="input-text">
+                            </div>
+                        </div>
+                        <div class="control-group">
+
+                            <label for="null_enabled" class="control-label">
+                                Null enabled?
+                            </label>
+
+                            <div class="controls">
+                                <input type="checkbox" id="null_enabled" name="null_enabled"
+                                       {if $_aRequest.null_enabled}checked{/if}/>
+                            </div>
+                        </div>
+
                         <div class="control-group"
-                             {if !$_aRequest.field_type || $_aRequest.field_type!='select'}style="display:none;"{/if}
-                             id="select_inputval">
+                             {if !$_aRequest.field_type || $_aRequest.field_type!='enum'}style="display:none;"{/if}
+                             id="enum_inputval">
                             <label for="field_description" class="control-label">
                                 {$aLang.action.admin.contenttypes_values}:
                             </label>
@@ -158,12 +181,12 @@
             });
         }
         function selectfield(f) {
-            $('#select_inputval').css({'display': 'none'});
+            $('#enum_inputval').css({'display': 'none'});
             $('#field_size').css({'display': 'none'});
 
             //для типа выпадающий список
-            if (f == 'select') {
-                $('#select_inputval').css({'display': 'block'});
+            if (f == 'enum') {
+                $('#enum_inputval').css({'display': 'block'});
             }
 
             if (f == 'float' || f == 'varchar') {

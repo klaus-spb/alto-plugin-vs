@@ -17,7 +17,7 @@ class PluginVs_ModuleVs extends ModuleORM
         $this->oMapper = E::GetMapper(__CLASS__);
         $this->oUserCurrent = E::ModuleUser()->GetUserCurrent();
     }
-
+    
     public function ShowColumnsFromTable($sTableName)
     {
         $data = $this->oMapper->ShowColumnsFromTable($sTableName);
