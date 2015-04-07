@@ -58,8 +58,8 @@ class PluginVs extends Plugin
     public function Init()
     {
         E::ModuleViewer()->AppendStyle(Plugin::GetTemplateDir(__CLASS__) . "assets/css/vs.css"); // Добавление своего CSS
-        E::ModuleViewer()->AppendScript(Plugin::GetTemplateDir(__CLASS__) . "assets/js/vs.js"); // Добавление своего JS
-
+        E::ModuleViewer()->AppendScript(Plugin::GetTemplateDir(__CLASS__) . "assets/js/vs.js");
+        E::ModuleViewer()->AppendScript(Plugin::GetTemplateDir(__CLASS__) . "assets/js/admins.js");
         //E::ModuleViewer()->AddMenu('blog',Plugin::GetTemplateDir(__CLASS__).'menu.blog.tpl'); // например, задаем свой вид меню
     }
 }
