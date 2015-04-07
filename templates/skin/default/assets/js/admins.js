@@ -106,7 +106,7 @@ ls.admins = (function ($) {
                     $('.dropdown-slider').slideUp();
                     $('span.toggle').removeClass('active');
                     var params = {};
-                    params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+                    params['security_ls_key'] = ALTO_SECURITY_KEY;
                     params['match_id'] = $(this).attr("name");
                     var name_of_this = $(this);
 
@@ -159,9 +159,9 @@ ls.admins = (function ($) {
             this.showProgress(blockContent);
 
             if (!params) {
-                params = {security_ls_key: LIVESTREET_SECURITY_KEY};
+                params = {security_ls_key: ALTO_SECURITY_KEY};
             } else {
-                params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+                params['security_ls_key'] = ALTO_SECURITY_KEY;
             }
             //alert(type);
             ls.ajax(this.options.type[type].url, params, function (result) {
@@ -196,9 +196,9 @@ ls.admins = (function ($) {
 
 
         if (!params) {
-            params = {security_ls_key: LIVESTREET_SECURITY_KEY};
+            params = {security_ls_key: ALTO_SECURITY_KEY};
         } else {
-            params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+            params['security_ls_key'] = ALTO_SECURITY_KEY;
         }
         if (type == "map") {
             params['mapintournament'] = this.obj.val();
