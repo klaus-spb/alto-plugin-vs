@@ -25,7 +25,7 @@
     {/if}
 
     <li {if $sMenuSubItemSelect=="shedule"}class="active"{/if}><a
-                href="{$oTournament->getUrlFull()}shedule/">{$aLang.plugin.vs.schelude}</a></li>
+                href="{$oTournament->getUrlFull()}shedule/">{$aLang.plugin.vs.schedule}</a></li>
 
     {if $oGame && $oGame->getSportId()!=4}
         <li {if $sMenuSubItemSelect=="events"}class="active"{/if}><a

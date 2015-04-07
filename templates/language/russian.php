@@ -75,7 +75,7 @@ return array(
     'teams' => 'Команды',
     'players' => 'Участники',
     'playoff' => 'ПО',
-    'schelude' => 'Расписание',
+    'schedule' => 'Расписание',
     'groups' => 'Группы',
     'Events' => 'Ивенты',
     'Penalty' => 'Наказания',
