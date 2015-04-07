@@ -8,30 +8,30 @@
     <div class="">
         <ul class="nav nav-pills">
             <li><strong></strong><a href="#" id="block_stream_topic"
-                                    onclick="ls.au.toggle(this,'tournament', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.event_au}</a>
+                                    onclick="ls.admins.toggle(this,'tournament', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.event_au}</a>
             </li>
             <li><a href="#" id="link_teams"
-                   onclick="ls.au.toggle(this,'teams', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.teams}</a>
+                   onclick="ls.admins.toggle(this,'teams', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.teams}</a>
             </li>
-            {*<li><a href="#" id="link_players" onclick="ls.au.toggle(this,'players', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.players}</a></li>
+            {*<li><a href="#" id="link_players" onclick="ls.admins.toggle(this,'players', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.players}</a></li>
             *}
             <li><a href="#" id="link_playoff"
-                   onclick="ls.au.toggle(this,'playoff', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.playoff}</a><em></em>
+                   onclick="ls.admins.toggle(this,'playoff', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.playoff}</a><em></em>
             </li>
             <li><a href="#" id="link_group"
-                   onclick="ls.au.toggle(this,'group', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.groups}</a><em></em>
+                   onclick="ls.admins.toggle(this,'group', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.groups}</a><em></em>
             </li>
             <li><a href="#" id="link_raspisanie"
-                   onclick="ls.au.toggle(this,'raspisanie', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.schelude}</a><em></em>
+                   onclick="ls.admins.toggle(this,'raspisanie', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.schedule}</a><em></em>
             </li>
             <li><a href="#" id="link_penalty"
-                   onclick="ls.au.toggle(this,'penalty', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Penalty}</a><em></em>
+                   onclick="ls.admins.toggle(this,'penalty', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Penalty}</a><em></em>
             </li>
             <li><a href="#" id="link_award"
-                   onclick="ls.au.toggle(this,'award', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Awards}</a><em></em>
+                   onclick="ls.admins.toggle(this,'award', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Awards}</a><em></em>
             </li>
             <li><a href="#" id="link_event"
-                   onclick="ls.au.toggle(this,'event', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Events}</a><em></em>
+                   onclick="ls.admins.toggle(this,'event', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Events}</a><em></em>
             </li>
 
         </ul>
@@ -69,7 +69,7 @@
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
                 ls.msg.notice('Done', ' ');
-                ls.au.toggle($('link_raspisanie'), 'raspisanie', {
+                ls.admins.toggle($('link_raspisanie'), 'raspisanie', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -84,7 +84,7 @@
         params['team_id'] = team_id;
         params['what'] = what;
         params['val'] = $(el).val();
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/update_ratings/', params, function (result) {
             if (!result) {
@@ -180,7 +180,7 @@
         }
 
         params['vznos'] = $('#vznos').val();
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/update_tournament/', params, function (result) {
             if (!result) {
@@ -205,7 +205,7 @@
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
                 ls.msg.notice('Сохранено', ' ');
-                ls.au.toggle($('link_teams'), 'tournament', {
+                ls.admins.toggle($('link_teams'), 'tournament', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -217,7 +217,7 @@
     function delete_logo(logo_type) {
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         params['logo_type'] = logo_type;
         ls.ajax(aRouter['ajax'] + 'au/delete_logo/', params, function (result) {
             if (!result) {
@@ -227,7 +227,7 @@
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
                 ls.msg.notice('Сохранено', ' ');
-                ls.au.toggle($('link_teams'), 'tournament', {
+                ls.admins.toggle($('link_teams'), 'tournament', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -240,7 +240,7 @@
     function update_tournament_stat() {
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/tournamentrating/', params, function (result) {
             if (!result) {
@@ -259,7 +259,7 @@
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
         params['round_id'] = $('#round_id').val();
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         if (params['round_id'] != 99999) {
             ls.ajax(aRouter['ajax'] + 'au/update_stattable/', params, function (result) {
                 if (!result) {
@@ -279,7 +279,7 @@
         var params = {};
         params['tournament_id'] = tournament_id;
         params['user_id'] = user_id;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/zayavki/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -297,7 +297,7 @@
         var params = {};
         params['tournament_id'] = tournament_id;
         params['user_id'] = user_id;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/change/', params, function (result) {
             if (!result) {
@@ -318,7 +318,7 @@
         params['tournament_id'] = tournament_id;
         params['user_id'] = user_id;
         params['team_id'] = team_id;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/setteam/', params, function (result) {
             if (!result) {
@@ -327,7 +327,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_teams'), 'teams', {
+                ls.admins.toggle($('link_teams'), 'teams', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -339,7 +339,7 @@
         var params = {};
         params['user_login'] = $('#user').val();
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/addplayer/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -347,7 +347,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_teams'), 'teams', {
+                ls.admins.toggle($('link_teams'), 'teams', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -360,7 +360,7 @@
         params['user_login'] = $('#user').val();
         params['why'] = $('#why').val();
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/addplayerpenalty/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -368,7 +368,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_penalty'), 'penalty', {
+                ls.admins.toggle($('link_penalty'), 'penalty', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -382,7 +382,7 @@
         params['why'] = $('#why').val();
         params['penalty_id'] = $('#penalty_id').val();
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/saveplayerpenalty/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -390,7 +390,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_penalty'), 'penalty', {
+                ls.admins.toggle($('link_penalty'), 'penalty', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -401,7 +401,7 @@
         var params = {};
         params['penalty_id'] = penalty_id;
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/deleteplayerpenalty/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -409,7 +409,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_penalty'), 'penalty', {
+                ls.admins.toggle($('link_penalty'), 'penalty', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -418,7 +418,7 @@
     }
 
     function edit_player_penalty(penalty_id) {
-        ls.au.toggle($('link_penalty'), 'penalty', {
+        ls.admins.toggle($('link_penalty'), 'penalty', {
             {/literal}
             tournament: {$oTournament->getTournamentId()},
             penalty_id: penalty_id {literal}
@@ -437,7 +437,7 @@
         params['prise'] = $('#prise').val();
 
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/addaward/', params, function (result) {
             if (!result) {
@@ -446,7 +446,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_award'), 'award', {
+                ls.admins.toggle($('link_award'), 'award', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -467,7 +467,7 @@
 
         params['medal_id'] = $('#medal_id').val();
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/saveaward/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -475,7 +475,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_award'), 'award', {
+                ls.admins.toggle($('link_award'), 'award', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -486,7 +486,7 @@
         var params = {};
         params['medal_id'] = medal_id;
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/deleteaward/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -494,7 +494,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_award'), 'award', {
+                ls.admins.toggle($('link_award'), 'award', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -503,7 +503,7 @@
     }
 
     function edit_award(medal_id) {
-        ls.au.toggle($('link_award'), 'award', {
+        ls.admins.toggle($('link_award'), 'award', {
             {/literal}
             tournament: {$oTournament->getTournamentId()},
             medal_id: medal_id {literal}
@@ -515,7 +515,7 @@
         params['event_name'] = $('#event_name').val();
         params['event_date'] = $('#event_date').val();
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/addevent/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -523,7 +523,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_event'), 'event', {
+                ls.admins.toggle($('link_event'), 'event', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -537,7 +537,7 @@
         params['event_name'] = $('#event_edit_name').val();
         params['event_date'] = $('#event_edit_date').val();
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/editevent/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -545,7 +545,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_event'), 'event', {
+                ls.admins.toggle($('link_event'), 'event', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -557,7 +557,7 @@
         var params = {};
         params['event_id'] = $('#event_edit_id').val();
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/calcevent/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -566,7 +566,7 @@
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
                 ls.msg.notice(result.sMsgTitle, result.sMsg);
-                ls.au.toggle($('link_event'), 'event', {
+                ls.admins.toggle($('link_event'), 'event', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -578,7 +578,7 @@
         var params = {};
         params['event_id'] = $('#event_edit_id').val();
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/deleteevent/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -587,7 +587,7 @@
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
                 ls.msg.notice(result.sMsgTitle, result.sMsg);
-                ls.au.toggle($('link_event'), 'event', {
+                ls.admins.toggle($('link_event'), 'event', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -599,7 +599,7 @@
         var params = {};
         params['team'] = $('#' + team).val();
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         params['round_id'] = round_id;
         ls.ajax(aRouter['ajax'] + 'au/addteam/', params, function (result) {
             if (!result) {
@@ -608,7 +608,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_teams'), 'group', {
+                ls.admins.toggle($('link_teams'), 'group', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -618,7 +618,7 @@
     function delete_teamtournament(teamtournament) {
         var params = {};
         params['tournament_id'] = {/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         params['teamtournament_id'] = teamtournament;
         ls.ajax(aRouter['ajax'] + 'au/deleteteamtournament/', params, function (result) {
             if (!result) {
@@ -627,7 +627,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_group'), 'group', {
+                ls.admins.toggle($('link_group'), 'group', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -638,7 +638,7 @@
     function tehnarim() {
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'match/teh_massovo/', params, function (result) {
             if (!result) {
@@ -648,14 +648,14 @@
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
                 ls.msg.notice('Сохранено', ' ');
-                //ls.au.toggle($('link_teams'),'group', {{/literal} tournament: {$oTournament->getTournamentId()} {literal}});
+                //ls.admins.toggle($('link_teams'),'group', {{/literal} tournament: {$oTournament->getTournamentId()} {literal}});
             }
         });
     }
     function annulim() {
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'match/anul_massovo/', params, function (result) {
             if (!result) {
@@ -665,7 +665,7 @@
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
                 ls.msg.notice('Сохранено', ' ');
-                //ls.au.toggle($('link_teams'),'group', {{/literal} tournament: {$oTournament->getTournamentId()} {literal}});
+                //ls.admins.toggle($('link_teams'),'group', {{/literal} tournament: {$oTournament->getTournamentId()} {literal}});
             }
         });
     }
@@ -676,7 +676,7 @@
         params['tournament_id'] = tournament_id;
         params['user_id'] = user_id;
         params['team_id'] = team_id;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
 
         ls.ajax(aRouter['ajax'] + 'au/deleteteam/', params, function (result) {
@@ -686,7 +686,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_teams'), 'teams', {
+                ls.admins.toggle($('link_teams'), 'teams', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -701,7 +701,7 @@
         params['tournament_id'] = tournament_id;
         params['user_id'] = user_id;
         params['user2_id'] = user2_id;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/changeteam/', params, function (result) {
             if (!result) {
@@ -710,7 +710,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_teams'), 'teams', {
+                ls.admins.toggle($('link_teams'), 'teams', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -721,7 +721,7 @@
     function delete_alone_teams() {
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/delete_alone_teams/', params, function (result) {
             if (!result) {
@@ -730,7 +730,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_teams'), 'teams', {
+                ls.admins.toggle($('link_teams'), 'teams', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -741,7 +741,7 @@
     function save_tournament() {
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()}{literal};
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/zayavki/', params, function (result) {
             if (!result) {
@@ -759,7 +759,7 @@
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
         params['round'] = $('#add_round').val();
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         if (params['round'] > 0) {
             ls.ajax(aRouter['ajax'] + 'au/createround/', params, function (result) {
@@ -769,7 +769,7 @@
                 if (result.bStateError) {
                     ls.msg.error(result.sMsgTitle, result.sMsg);
                 } else {
-                    ls.au.toggle($('link_playoff'), 'playoff', {
+                    ls.admins.toggle($('link_playoff'), 'playoff', {
                         {/literal}
                         tournament: {$oTournament->getTournamentId()} {literal}
                     });
@@ -783,7 +783,7 @@
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
         params['round'] = round_po;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         if (params['round'] > 0) {
             ls.ajax(aRouter['ajax'] + 'au/deleteround/', params, function (result) {
@@ -793,7 +793,7 @@
                 if (result.bStateError) {
                     ls.msg.error(result.sMsgTitle, result.sMsg);
                 } else {
-                    ls.au.toggle($('link_playoff'), 'playoff', {
+                    ls.admins.toggle($('link_playoff'), 'playoff', {
                         {/literal}
                         tournament: {$oTournament->getTournamentId()} {literal}
                     });
@@ -810,7 +810,7 @@
         params['group_id'] = $('#' + el).val();
         params['teamintournament_id'] = teamintournament_id;
         params['round_id'] = round_id;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/setparentgroup/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -829,7 +829,7 @@
         params['group_id'] = $('#' + el).val();
         params['teamintournament_id'] = teamintournament_id;
         params['round_id'] = round_id;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
         ls.ajax(aRouter['ajax'] + 'au/setgroup/', params, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');
@@ -847,7 +847,7 @@
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
         params['round_num'] = el;
         params['teamintournament_id'] = $('#' + el).val();
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
 
         ls.ajax(aRouter['ajax'] + 'au/saveround/', params, function (result) {
@@ -871,7 +871,7 @@
         params['matches_in_day'] = $('#' + num + 'matches_in_day').val();
         params['matches_between_day'] = $('#' + num + 'matches_between_day').val();
         params['matches_to_win'] = $('#' + num + 'matches_to_win').val();
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/createraspisanie/', params, function (result) {
             if (!result) {
@@ -880,7 +880,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_playoff'), 'playoff', {
+                ls.admins.toggle($('link_playoff'), 'playoff', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -894,7 +894,7 @@
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
         params['round'] = num;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/deleteraspisanie/', params, function (result) {
             if (!result) {
@@ -903,7 +903,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_playoff'), 'playoff', {
+                ls.admins.toggle($('link_playoff'), 'playoff', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -915,7 +915,7 @@
         var params = {};
         params['tournament_id'] ={/literal}{$oTournament->getTournamentId()} {literal};
         params['round'] = num;
-        params['security_ls_key'] = LIVESTREET_SECURITY_KEY;
+        params['security_ls_key'] = ALTO_SECURITY_KEY;
 
         ls.ajax(aRouter['ajax'] + 'au/deletenotplayed/', params, function (result) {
             if (!result) {
@@ -924,7 +924,7 @@
             if (result.bStateError) {
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
-                ls.au.toggle($('link_playoff'), 'playoff', {
+                ls.admins.toggle($('link_playoff'), 'playoff', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
