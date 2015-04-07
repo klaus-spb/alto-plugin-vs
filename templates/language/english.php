@@ -1,6 +1,6 @@
 <?php
 /**
- * Русский языковой файл плагина
+ * English language file for plug-in
  */
 return array(
 
