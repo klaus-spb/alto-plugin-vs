@@ -30,6 +30,7 @@ class PluginVs extends Plugin
         = array(
             'action' => array(
                 'ActionAdmin' => 'PluginVs_ActionAdmin',
+                'ActionAjax' => 'PluginVs_ActionAjax',
             ),
         );
 

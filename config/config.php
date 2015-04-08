@@ -15,6 +15,8 @@ $config = array();
 
 $config['tables_can_be_configured'] = array('tournament', 'player_card', 'tournament_stat', 'player_stat');
 
+$config['super_admins'] = array(1);
+
 $config['field_types'] = array(
     'tinyint' => 'tinyint(1)',
     'int' => 'int(11)',

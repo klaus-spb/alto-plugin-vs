@@ -6,71 +6,47 @@ ls.admins = (function ($) {
         active: 'active',
         loader: DIR_STATIC_SKIN + '/images/loader.gif',
         type: {
-            comment_stream: {
-                url: aRouter['ajax'] + 'stream/comment/'
-            },
-            topic_stream: {
-                url: aRouter['ajax'] + 'ajax/topic/'
-            },
-            blogs_top: {
-                url: aRouter['ajax'] + 'blogs/top/'
-            },
-            blogs_join: {
-                url: aRouter['ajax'] + 'blogs/join/'
-            },
-            blogs_self: {
-                url: aRouter['ajax'] + 'blogs/self/'
-            },
             tournament: {
-                url: aRouter['ajax'] + 'au/tournament/'
+                url: aRouter['ajax'] + 'admins/tournament/'
             },
             teams: {
-                url: aRouter['ajax'] + 'au/teams/'
+                url: aRouter['ajax'] + 'admins/teams/'
             },
             playoff: {
-                url: aRouter['ajax'] + 'au/playoff/'
+                url: aRouter['ajax'] + 'admins/playoff/'
             },
             players: {
-                url: aRouter['ajax'] + 'au/players/'
+                url: aRouter['ajax'] + 'admins/players/'
             },
-            createstattable: {
-                url: aRouter['ajax'] + 'au/createstattable/'
+            create_stat_table: {
+                url: aRouter['ajax'] + 'admins/create_stat_table/'
             },
-            createshedule: {
-                url: aRouter['ajax'] + 'au/createshedule/'
+            create_schedule: {
+                url: aRouter['ajax'] + 'admins/create_schedule/'
             },
-            deleteshedule: {
-                url: aRouter['ajax'] + 'au/deleteshedule/'
+            delete_schedule: {
+                url: aRouter['ajax'] + 'admins/delete_schedule/'
             },
-            setteams: {
-                url: aRouter['ajax'] + 'au/setteams/'
-            },
-            weeks: {
-                url: aRouter['ajax'] + 'raspisanie/weeks/'
-            },
-            monthes: {
-                url: aRouter['ajax'] + 'raspisanie/monthes/'
-            },
-            map: {
-                url: aRouter['ajax'] + 'raspisanie/map/'
+            set_teams: {
+                url: aRouter['ajax'] + 'admins/set_teams/'
             },
             group: {
-                url: aRouter['ajax'] + 'au/group/'
+                url: aRouter['ajax'] + 'admins/group/'
             },
-            raspisanie: {
-                url: aRouter['ajax'] + 'au/raspisanie/'
+            schedule: {
+                url: aRouter['ajax'] + 'admins/schedule/'
             },
             event: {
-                url: aRouter['ajax'] + 'au/event/'
+                url: aRouter['ajax'] + 'admins/event/'
             },
-            eventday: {
-                url: aRouter['ajax'] + 'au/eventday/'
+            event_day: {
+                url: aRouter['ajax'] + 'admins/event_day/'
             },
             penalty: {
-                url: aRouter['ajax'] + 'au/penalty/'
+                url: aRouter['ajax'] + 'admins/penalty/'
             },
             award: {
-                url: aRouter['ajax'] + 'au/award/'
+                url: aRouter['ajax'] + 'admins/award/'
             }
         }
     }
@@ -81,36 +57,32 @@ ls.admins = (function ($) {
             ls.msg.error('Error', 'Please try again later');
         }
         if (result.bStateError) {
-            //ls.msg.error(result.sMsgTitle,result.sMsg);
+            ls.msg.error(result.sMsgTitle, result.sMsg);
         } else {
             blockContent.html(result.sText);
             $('.date-picker').datepicker({
                 weekStart: 1,
                 dateFormat: 'dd.mm.yy',
-                dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
                 firstDay: 1,
                 autoclose: true
             });
             if (1 == 1) {
-                ls.adminstocomplete.add($(".autocomplete-teama"), aRouter['ajax'] + 'autocompleter/teama/', false);
-                ls.adminstocomplete.add($(".autocomplete-users"), aRouter['ajax'] + 'autocompleter/user/', false);
+                ls.autocomplete.add($(".autocomplete-teams"), aRouter['ajax'] + 'autocompleter/teams/', false);
+                ls.autocomplete.add($(".autocomplete-users"), aRouter['ajax'] + 'autocompleter/user/', false);
 
-                ls.adminstocomplete.add($(".autocomplete-playercard"), aRouter['ajax'] + 'autocompleter/playercard/', true);
-                ls.adminstocomplete.add($(".autocomplete-team"), aRouter['ajax'] + 'autocompleter/team/', false);
+                ls.autocomplete.add($(".autocomplete-player_card"), aRouter['ajax'] + 'autocompleter/player_card/', true);
+                ls.autocomplete.add($(".autocomplete-team"), aRouter['ajax'] + 'autocompleter/team/', false);
             }
             $(".dropdown .buttons, .dropdown buttons").click(function () {
-
 
                 if (!$(this).find('span.toggle').hasClass('active')) {
                     $('.dropdown-slider').slideUp();
                     $('span.toggle').removeClass('active');
                     var params = {};
-                    params['security_ls_key'] = ALTO_SECURITY_KEY;
                     params['match_id'] = $(this).attr("name");
                     var name_of_this = $(this);
 
-                    ls.ajax(aRouter['ajax'] + 'match/getbuttons/', params, function (result) {
+                    ls.ajax(aRouter['ajax'] + 'match/get_buttons/', params, function (result) {
                         if (!result) {
                             ls.msg.error('Error', 'Please try again later');
                         }
@@ -140,30 +112,12 @@ ls.admins = (function ($) {
             if (!this.options.type[type]) return false;
             thisObj = this;
             this.obj = $(obj);
-            if (type == 'weeks' || type == 'monthes') {
-                var liCurrent = this.obj.parent();
-                var blockNav = liCurrent.parent();
-                var liList = blockNav.children('li');
 
-                liList.each(function (index, item) {
-                    $(item).removeClass('active');
-                });
+            var blockContent = $('#div_admins');
 
-                liCurrent.addClass('active');
-
-                var blockContent = $('#div_raspisanie');
-            } else {
-                //var blockContent=thisObj.obj.parent('div');
-                var blockContent = $('#div_au');
-            }
             this.showProgress(blockContent);
 
-            if (!params) {
-                params = {security_ls_key: ALTO_SECURITY_KEY};
-            } else {
-                params['security_ls_key'] = ALTO_SECURITY_KEY;
-            }
-            //alert(type);
+
             ls.ajax(this.options.type[type].url, params, function (result) {
                 if (!result) {
                     ls.msg.error('Error', 'Please try again later');
@@ -184,29 +138,21 @@ ls.admins = (function ($) {
         thisObj = this;
         this.obj = $(obj);
 
-        if (type == 'weeks' || type == 'monthes' || type == "map") {
-            var blockContent = $('#div_raspisanie');
-        }
-        if (type == 'eventday') {
-            var blockContent = $('#div_eventday');
+        if (type == 'event_day') {
+            var blockContent = $('#div_event_day');
         } else {
             var blockContent = thisObj.obj.parent('div');
         }
         this.showProgress(blockContent);
 
 
-        if (!params) {
-            params = {security_ls_key: ALTO_SECURITY_KEY};
-        } else {
-            params['security_ls_key'] = ALTO_SECURITY_KEY;
-        }
         if (type == "map") {
             params['mapintournament'] = this.obj.val();
         }
         if (type == "eventday") {
             params['event_id'] = this.obj.val();
         }
-        //alert(type);
+
         ls.ajax(this.options.type[type].url, params, function (result) {
             this.onLoad(result, blockContent);
 

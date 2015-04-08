@@ -36,7 +36,7 @@
 
         </ul>
 
-        <div class="block-content" id="div_au">
+        <div class="block-content" id="div_admins">
         </div>
     </div>
 {literal}
@@ -195,8 +195,7 @@
     }
 
     function upload_logo(logo_type) {
-        //var params = new FormData($('#form_'+logo_type));
-        //alert($('#form_'+logo_type).serialize());
+
         ls.ajaxSubmit(aRouter['ajax'] + 'au/upload_logo/', 'form_' + logo_type, function (result) {
             if (!result) {
                 ls.msg.error('Error', 'Please try again later');

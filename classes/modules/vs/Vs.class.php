@@ -17,7 +17,7 @@ class PluginVs_ModuleVs extends ModuleORM
         $this->oMapper = E::GetMapper(__CLASS__);
         $this->oUserCurrent = E::ModuleUser()->GetUserCurrent();
     }
-    
+
     public function ShowColumnsFromTable($sTableName)
     {
         $data = $this->oMapper->ShowColumnsFromTable($sTableName);
@@ -101,6 +101,11 @@ class PluginVs_ModuleVs extends ModuleORM
         }
 
         return E::ModuleTopic()->GetTopicsByFilter($aFilter, $iPage, $iPerPage);
+    }
+
+    public function GetAll($sql)
+    {
+        return $this->oMapper->GetAll($sql);
     }
 }
 
