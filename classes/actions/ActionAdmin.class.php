@@ -237,6 +237,13 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
                     Config::Get('admin.items_per_page'))
             )
         );
+        /*dev
+                foreach ($aConfigTable['collection'] as $oConfigTable) {
+                    $oConfigTable->setFieldDescription('{{plugin.vs.' . F::StrCamelize($oConfigTable->getFieldName()) . '}}');
+                    $oConfigTable->Save();
+                    echo "'".F::StrCamelize($oConfigTable->getFieldName())."' => '',</br>";
+                }
+        */
         $aPaging = $this->Viewer_MakePaging(
             $aConfigTable['count'], $nPage, Config::Get('admin.items_per_page'), 4,
             Router::GetPath('admin') . 'config_table/'
