@@ -38,7 +38,13 @@ class PluginVs_ActionAjax extends PluginVs_Inherit_ActionAjax
             'name <>' => ''
         ));
 
+        $aFields = E::Module('PluginVs\Vs')->GetConfigTableItemsByFilter(array(
+            'table' => 'tournament',
+            'system' => '0'
+        ));
+
         $oViewer->Assign('aLeagues', $aLeagues);
+        $oViewer->Assign('aFields', $aFields);
         $oViewer->Assign('oTournament', $oTournament);
         $oViewer->Assign('aTopics', $aTopics['collection']);
 

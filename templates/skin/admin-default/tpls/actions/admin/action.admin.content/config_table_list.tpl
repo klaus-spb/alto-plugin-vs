@@ -20,6 +20,8 @@
                         <th>field_name</th>
                         <th>field_description</th>
                         <th>field_type</th>
+                        <th>sytem</th>
+                        <th></th>
 
                     </tr>
                     </thead>
@@ -32,16 +34,17 @@
                             <td>{$oConfigTable->getFieldName()}</td>
                             <td>{$oConfigTable->getFieldDescription()}</td>
                             <td>{$oConfigTable->getFieldType()}</td>
+                            <td>{if $oConfigTable->getSystem()}*{/if}</td>
 
                             <td class="center">
                                 <a href="{router page='admin'}config_table/edit/{$oConfigTable->getConfigTableId()}/"
                                    title="Edit" class="tip-top i-block">
                                     <i class="icon icon-note"></i>
                                 </a>
-                                <a href="#" title="Delete" class="tip-top i-block"
+                                {*<a href="#" title="Delete" class="tip-top i-block"
                                    onclick="return admin.confirmDelete('{$oConfigTable->getConfigTableId()}'); return false;">
                                     <i class="icon icon-trash"></i>
-                                </a>
+                                </a>*}
                             </td>
                         </tr>
                     {/foreach}

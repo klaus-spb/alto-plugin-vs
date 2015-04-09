@@ -51,6 +51,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
             $oConfigTable->setFieldOptions('');
             $oConfigTable->setDefaultValue($aTable['COLUMN_DEFAULT']?$aTable['COLUMN_DEFAULT']:'');
             $oConfigTable->setNullEnabled($aTable['IS_NULLABLE']);
+            $oConfigTable->setSystem(0);
             $oConfigTable->Add();
         }
         */
@@ -87,6 +88,8 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
                     $_REQUEST['field_description'] = $oConfigTableEdit->getFieldDescription();
                     $_REQUEST['field_type'] = $oConfigTableEdit->getFieldType();
                     $_REQUEST['field_options'] = $oConfigTableEdit->getFieldOptions();
+                    $_REQUEST['null_enabled'] = $oConfigTableEdit->getNullEnabled();
+                    $_REQUEST['system'] = $oConfigTableEdit->getSystem();
 
                 } else {
                     $this->SubmitEditConfigTable($oConfigTableEdit);
@@ -120,6 +123,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
             $oConfigTable->setFieldOptions(F::GetRequest('field_options'));
             $oConfigTable->setDefaultValue(F::GetRequest('default_value'));
             $oConfigTable->setNullEnabled(F::GetRequest('null_enabled') ? 1 : 0);
+            $oConfigTable->setSystem(F::GetRequest('system') ? 1 : 0);
         }
         $sFieldType = Config::Get('plugin.vs.field_types')[F::GetRequest('field_type')];
         /**
@@ -194,6 +198,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         }
 
         $oConfigTableEdit->setFieldDescription(F::GetRequest('field_description'));
+        $oConfigTableEdit->setSystem(F::GetRequest('system') ? 1 : 0);
 
 
         // * Обновляем страницу

@@ -135,13 +135,16 @@
                             </div>
                         </div>
 
-                        <div {if !$_aRequest.field_type || $_aRequest.field_type!='daoobj'}style="display:none;"{/if}
-                             id="daoobj_select">
-                            {if $aPluginActive.dao}
-                                {include file="`$aTemplatePathPlugin.dao`inject.topiccck.tpl"}
-                            {else}
-                                {$aLang.action.admin.contenttypes_buydao}
-                            {/if}
+                        <div class="control-group">
+
+                            <label for="system" class="control-label">
+                                Don`t show in tournament admin panel
+                            </label>
+
+                            <div class="controls">
+                                <input type="checkbox" id="system" name="system"
+                                       {if $_aRequest.system}checked{/if}/>
+                            </div>
                         </div>
 
 

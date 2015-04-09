@@ -1,3 +1,18 @@
+<div class="form-group">
+    {foreach $aFields as $oField}
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon">{$oField->GetDescription()}</span>
+                <input type="text"
+                       name="{$oField->getFieldName()}" id="{$oField->getFieldName()}"
+                       value="{$oTournament->getProp($oField->getFieldName())|escape:'html'}" class="form-control">
+            </div>
+            {*<small class="control-notice"></small>*}
+        </div>
+    {/foreach}
+
+</div>
+
 <p><select class="w200" id="known_teams" onchange="update_tournament(); return false;">
         <OPTION value="0" {if $oTournament->getKnownTeams()==0}SELECTED{/if}>Команды не известны</OPTION>
         <OPTION value="1" {if $oTournament->getKnownTeams()==1}SELECTED{/if}>Команды известны</OPTION>
