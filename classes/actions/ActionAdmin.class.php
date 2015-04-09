@@ -38,7 +38,22 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
 
     protected function EventConfigTable()
     {
+        /*
+        $sTable='tournament';
+        $aTournamentTable = E::Module('PluginVs\Vs')->GetTableInfo('prefix_vs_'.$sTable);
 
+        foreach($aTournamentTable as $aTable){
+            $oConfigTable = E::GetEntity('PluginVs_ModuleVs_EntityConfigTable');
+            $oConfigTable->setTable($sTable);
+            $oConfigTable->setFieldName($aTable['COLUMN_NAME']);
+            $oConfigTable->setFieldDescription('');
+            $oConfigTable->setFieldType($aTable['DATA_TYPE']);
+            $oConfigTable->setFieldOptions('');
+            $oConfigTable->setDefaultValue($aTable['COLUMN_DEFAULT']?$aTable['COLUMN_DEFAULT']:'');
+            $oConfigTable->setNullEnabled($aTable['IS_NULLABLE']);
+            $oConfigTable->Add();
+        }
+        */
         $this->sMainMenuItem = 'content';
 
         if ($this->GetParam(0) == 'add') {
@@ -98,7 +113,6 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
 
             // * Заполняем свойства
             $oConfigTable = E::GetEntity('PluginVs_ModuleVs_EntityConfigTable');
-            $oConfigTable->setConfigTableId(F::GetRequest('config_table_id'));
             $oConfigTable->setTable(F::GetRequest('table'));
             $oConfigTable->setFieldName(F::GetRequest('field_name'));
             $oConfigTable->setFieldDescription(F::GetRequest('field_description'));

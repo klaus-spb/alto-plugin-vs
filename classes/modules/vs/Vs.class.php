@@ -107,6 +107,11 @@ class PluginVs_ModuleVs extends ModuleORM
     {
         return $this->oMapper->GetAll($sql);
     }
+
+    public function GetTableInfo($sTableName)
+    {
+        return $this->oMapper->GetTableInfo($sTableName);
+    }
 }
 
 ?>
