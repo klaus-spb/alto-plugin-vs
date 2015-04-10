@@ -1,14 +1,8 @@
 <div class="form-group">
+
     {foreach $aFields as $oField}
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon">{$oField->GetDescription()}</span>
-                <input type="text"
-                       name="{$oField->getFieldName()}" id="{$oField->getFieldName()}"
-                       value="{$oTournament->getProp($oField->getFieldName())|escape:'html'}" class="form-control">
-            </div>
-            {*<small class="control-notice"></small>*}
-        </div>
+        {include file="{Plugin::GetTemplateDir('Vs')}tpls/fields/custom/field.custom.`$oField->getFieldType()`-edit.tpl" oField=$oField oObject=$oTournament}
+
     {/foreach}
 
 </div>
