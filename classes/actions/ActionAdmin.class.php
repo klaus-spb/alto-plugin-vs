@@ -119,7 +119,18 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
             $oConfigTable->setTable(F::GetRequest('table'));
             $oConfigTable->setFieldName(F::GetRequest('field_name'));
             $oConfigTable->setFieldDescription(F::GetRequest('field_description'));
-            $oConfigTable->setFieldType(F::GetRequest('field_type'));
+            $oConfigTable->setColumnType(F::GetRequest('field_type'));
+            if (F::GetRequest('field_type') == 'date') {
+                $oConfigTable->setFieldType('date');
+            } elseif (F::GetRequest('field_type') == 'datetime') {
+                $oConfigTable->setFieldType('datetime');
+            } elseif (F::GetRequest('field_type') == 'text') {
+                $oConfigTable->setFieldType('textarea');
+            } elseif (F::GetRequest('field_type') == 'tinyint') {
+                $oConfigTable->setFieldType('checkbox');
+            } else {
+                $oConfigTable->setFieldType('input');
+            }
             $oConfigTable->setFieldOptions(F::GetRequest('field_options'));
             $oConfigTable->setDefaultValue(F::GetRequest('default_value'));
             $oConfigTable->setNullEnabled(F::GetRequest('null_enabled') ? 1 : 0);
