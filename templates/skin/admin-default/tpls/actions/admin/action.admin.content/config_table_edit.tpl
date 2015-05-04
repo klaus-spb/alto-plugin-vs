@@ -31,11 +31,11 @@
                             </label>
 
                             <div class="controls">
-                                <select name="table" id="table" class="input-text input-width-300"
+                                <select name="table_name" id="table_name" class="input-text input-width-300"
                                         {if $sMode=='edit'}disabled{/if}>
                                     {foreach from=Config::Get('plugin.vs.tables_can_be_configured') item=sTable}
                                         <option value="{$sTable}"
-                                                {if $_aRequest.table==$sTable}selected{/if}>{$sTable|escape:'html'}</option>
+                                                {if $_aRequest.table_name==$sTable}selected{/if}>{$sTable|escape:'html'}</option>
                                     {/foreach}
                                 </select>
                             </div>

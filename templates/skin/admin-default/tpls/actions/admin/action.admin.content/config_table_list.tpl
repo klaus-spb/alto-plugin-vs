@@ -3,6 +3,14 @@
 {block name="content-bar"}
     <div class="btn-group">
         <a href="{router page='admin'}config_table/add/" class="btn btn-primary"><i class="icon icon-plus"></i></a>
+        {foreach from=Config::Get('plugin.vs.tables_can_be_configured') item=sTable}
+            <a class="btn btn-default {if $sMode==$sTable}active{/if}"
+               href="{router page='admin'}config_table/{$sTable}/">
+                {$sTable}
+            </a>
+        {/foreach}
+
+
     </div>
 {/block}
 
@@ -16,7 +24,7 @@
                     <thead>
                     <tr>
 
-                        <th>table</th>
+                        <th>table_name</th>
                         <th>field_name</th>
                         <th>field_description</th>
                         <th>field_type</th>
@@ -30,7 +38,7 @@
                     {foreach $aConfigTable as $oConfigTable}
                         <tr>
 
-                            <td>{$oConfigTable->getTable()}</td>
+                            <td>{$oConfigTable->getTableName()}</td>
                             <td>{$oConfigTable->getFieldName()}</td>
                             <td>{$oConfigTable->getFieldDescription()}</td>
                             <td>{$oConfigTable->getFieldType()}</td>

@@ -83,7 +83,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
             if ($oConfigTableEdit = E::Module('PluginVs\Vs')->GetConfigTableByConfigTableId($this->GetParam(1))) {
                 if (!F::isPost('submit_config_table_save')) {
                     $_REQUEST['config_table_id'] = $oConfigTableEdit->getConfigTableId();
-                    $_REQUEST['table'] = $oConfigTableEdit->getTable();
+                    $_REQUEST['table_name'] = $oConfigTableEdit->getTableName();
                     $_REQUEST['field_name'] = $oConfigTableEdit->getFieldName();
                     $_REQUEST['field_description'] = $oConfigTableEdit->getFieldDescription();
                     $_REQUEST['field_type'] = $oConfigTableEdit->getFieldType();
@@ -116,7 +116,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
 
             // * Заполняем свойства
             $oConfigTable = E::GetEntity('PluginVs_ModuleVs_EntityConfigTable');
-            $oConfigTable->setTable(F::GetRequest('table'));
+            $oConfigTable->setTableName(F::GetRequest('table_name'));
             $oConfigTable->setFieldName(F::GetRequest('field_name'));
             $oConfigTable->setFieldDescription(F::GetRequest('field_description'));
             $oConfigTable->setColumnType(F::GetRequest('field_type'));
@@ -243,6 +243,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         $nPage = $this->_getPageNum();
         $aConfigTable = E::Module('PluginVs\Vs')->GetConfigTableItemsByFilter(
             array(
+                '#where' => array("(table_name = ? or '' = ? )" => array($this->GetParam(0) ? $this->GetParam(0) : '', $this->GetParam(0) ? $this->GetParam(0) : '')),
                 '#page' => 1,
                 '#limit' => array(($nPage - 1) * Config::Get('admin.items_per_page'),
                     Config::Get('admin.items_per_page'))
@@ -257,7 +258,7 @@ class PluginVs_ActionAdmin extends PluginVs_Inherits_ActionAdmin
         */
         $aPaging = $this->Viewer_MakePaging(
             $aConfigTable['count'], $nPage, Config::Get('admin.items_per_page'), 4,
-            Router::GetPath('admin') . 'config_table/'
+            Router::GetPath('admin') . 'config_table/' . ($this->GetParam(0) ? $this->GetParam(0) . '/' : '')
         );
 
         E::ModuleViewer()->Assign('aConfigTable', $aConfigTable['collection']);

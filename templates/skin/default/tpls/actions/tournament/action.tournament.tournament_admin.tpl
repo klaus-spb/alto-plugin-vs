@@ -5,39 +5,51 @@
 {/block}
 
 {block name="layout_content"}
-    <div class="">
-        <ul class="nav nav-pills">
-            <li><strong></strong><a href="#" id="block_stream_topic"
-                                    onclick="ls.admins.toggle(this,'tournament', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.event_au}</a>
-            </li>
-            <li><a href="#" id="link_teams"
-                   onclick="ls.admins.toggle(this,'teams', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.teams}</a>
-            </li>
-            {*<li><a href="#" id="link_players" onclick="ls.admins.toggle(this,'players', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.players}</a></li>
-            *}
-            <li><a href="#" id="link_playoff"
-                   onclick="ls.admins.toggle(this,'playoff', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.playoff}</a><em></em>
-            </li>
-            <li><a href="#" id="link_group"
-                   onclick="ls.admins.toggle(this,'group', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.groups}</a><em></em>
-            </li>
-            <li><a href="#" id="link_raspisanie"
-                   onclick="ls.admins.toggle(this,'raspisanie', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.schedule}</a><em></em>
-            </li>
-            <li><a href="#" id="link_penalty"
-                   onclick="ls.admins.toggle(this,'penalty', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Penalty}</a><em></em>
-            </li>
-            <li><a href="#" id="link_award"
-                   onclick="ls.admins.toggle(this,'award', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Awards}</a><em></em>
-            </li>
-            <li><a href="#" id="link_event"
-                   onclick="ls.admins.toggle(this,'event', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Events}</a><em></em>
-            </li>
+    <div class="panel panel-default">
+        <div class="col-sm-24">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#" id="link_tournament"
+                       onclick="ls.admins.toggle(this,'tournament', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Tournament}</a>
+                </li>
+                <li>
+                    <a href="#" id="link_teams"
+                       onclick="ls.admins.toggle(this,'teams', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Teams}</a>
+                </li>
+                {*<li>
+                    <a href="#" id="link_players"
+                       onclick="ls.admins.toggle(this,'players', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Players}</a></li>
+                *}
+                <li>
+                    <a href="#" id="link_playoff"
+                       onclick="ls.admins.toggle(this,'playoff', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Playoff}</a>
+                </li>
+                <li>
+                    <a href="#" id="link_group"
+                       onclick="ls.admins.toggle(this,'group', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Groups}</a>
+                </li>
+                <li>
+                    <a href="#" id="link_schedule"
+                       onclick="ls.admins.toggle(this,'raspisanie', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Schedule}</a>
+                </li>
+                <li>
+                    <a href="#" id="link_penalty"
+                       onclick="ls.admins.toggle(this,'penalty', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Penalty}</a>
+                </li>
+                <li>
+                    <a href="#" id="link_award"
+                       onclick="ls.admins.toggle(this,'award', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Awards}</a>
+                </li>
+                <li>
+                    <a href="#" id="link_event"
+                       onclick="ls.admins.toggle(this,'event', {literal}{{/literal} tournament: {$oTournament->getTournamentId()} {literal}}{/literal}); return false;">{$aLang.plugin.vs.Events}</a>
+                </li>
 
-        </ul>
-
-        <div class="block-content" id="div_admins">
+            </ul>
         </div>
+        <div class="panel-body" id="div_admins">
+        </div>
+
     </div>
 {literal}
     <script type="text/javascript">
@@ -69,7 +81,7 @@
                 ls.msg.error(result.sMsgTitle, result.sMsg);
             } else {
                 ls.msg.notice('Done', ' ');
-                ls.admins.toggle($('link_raspisanie'), 'raspisanie', {
+                ls.admins.toggle($('link_schedule'), 'raspisanie', {
                     {/literal}
                     tournament: {$oTournament->getTournamentId()} {literal}
                 });
@@ -939,6 +951,15 @@
                                 $("#allusers").tablesorter();
                                 $('#secret').val(1);
                             }
+
+                            /*var $checks = $('input');
+
+                             if ($checks.length > 0) {
+                             $checks.iCheck({
+                             checkboxClass: 'icheckbox_square-blue',
+                             radioClass: 'iradio_square-blue'
+                             });
+                             }*/
                         },
                         false);
             },

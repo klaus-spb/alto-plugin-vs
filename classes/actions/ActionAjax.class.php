@@ -39,7 +39,7 @@ class PluginVs_ActionAjax extends PluginVs_Inherit_ActionAjax
         ));
 
         $aFields = E::Module('PluginVs\Vs')->GetConfigTableItemsByFilter(array(
-            'table' => 'tournament',
+            'table_name' => 'tournament',
             'system' => '0'
         ));
 
