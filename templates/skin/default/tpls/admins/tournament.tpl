@@ -246,49 +246,50 @@
         команды</a>
 
 {/if}
+    {*
+    <p>
+        <label for="tournament_small_logo">Загрузить маленькое лого (32x32):</label>
 
-<p>
-    <label for="tournament_small_logo">Загрузить маленькое лого (32x32):</label>
+        <form method="post" id="form_small_logo" enctype="multipart/form-data">
+        <input type="file" name="tournament_small_logo" id="tournament_small_logo" class="input-text"
+               onchange="upload_logo('small_logo'); return false;"/>
+        <input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}">
+        <input type="hidden" name="tournament_id" value="{$oTournament->getTournamentId()}">
+        <input type="hidden" name="logo_type" value="small_logo">
+    </form>
+    <div id="brand_box_image">
+        {if $oTournament->getLogoSmall()}
+            <br/>
+            <a href="{$oTournament->getLogoSmall()}" rel="[photoset]" title="" class="photoset-image"><img
+                        src="{cfg name='path.root.web'}/images/tournament/{$oTournament->getUrl()}/{$oTournament->getLogoSmall()}"
+                        alt="" width="32"/></a>
+            <label><input onchange="delete_logo('small_logo'); return false;" type="checkbox"
+                          id="tournament_small_logo_delete" name="tournament_small_logo_delete" value="on"
+                          class="input-checkbox"> Удалить маленький лого</label>
+        {/if}
+    </div>
+    </p>
+    <p>
+        <label for="tournament_full_logo">Загрузить Большое лого (200x200):</label>
 
-    <form method="post" id="form_small_logo" enctype="multipart/form-data">
-    <input type="file" name="tournament_small_logo" id="tournament_small_logo" class="input-text"
-           onchange="upload_logo('small_logo'); return false;"/>
-    <input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}">
-    <input type="hidden" name="tournament_id" value="{$oTournament->getTournamentId()}">
-    <input type="hidden" name="logo_type" value="small_logo">
-</form>
-<div id="brand_box_image">
-    {if $oTournament->getLogoSmall()}
-        <br/>
-        <a href="{$oTournament->getLogoSmall()}" rel="[photoset]" title="" class="photoset-image"><img
-                    src="{cfg name='path.root.web'}/images/tournament/{$oTournament->getUrl()}/{$oTournament->getLogoSmall()}"
-                    alt="" width="32"/></a>
-        <label><input onchange="delete_logo('small_logo'); return false;" type="checkbox"
-                      id="tournament_small_logo_delete" name="tournament_small_logo_delete" value="on"
-                      class="input-checkbox"> Удалить маленький лого</label>
-    {/if}
-</div>
-</p>
-<p>
-    <label for="tournament_full_logo">Загрузить Большое лого (200x200):</label>
+        <form method="post" id="form_full_logo" enctype="multipart/form-data">
+        <input type="file" name="tournament_full_logo" id="tournament_full_logo" class="input-text"
+               onchange="upload_logo('full_logo'); return false;"/>
+        <input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}">
+        <input type="hidden" name="tournament_id" value="{$oTournament->getTournamentId()}">
+        <input type="hidden" name="logo_type" value="full_logo">
+    </form>
+    <div id="brand_box_image">
+        {if $oTournament->getLogoFull()}
+            <br/>
+            <a href="{$oTournament->getLogoFull()}" rel="[photoset]" title="" class="photoset-image"><img
+                        src="{cfg name='path.root.web'}/images/tournament/{$oTournament->getUrl()}/{$oTournament->getLogoFull()}"
+                        alt=""/></a>
+            <label><input onchange="delete_logo('small_logo'); return false;" type="checkbox"
+                          id="tournament_full_logo_delete" name="tournament_full_logo_delete" value="on"
+                          class="input-checkbox"> Удалить большое лого</label>
+        {/if}
+    </div>
+    </p>
 
-    <form method="post" id="form_full_logo" enctype="multipart/form-data">
-    <input type="file" name="tournament_full_logo" id="tournament_full_logo" class="input-text"
-           onchange="upload_logo('full_logo'); return false;"/>
-    <input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}">
-    <input type="hidden" name="tournament_id" value="{$oTournament->getTournamentId()}">
-    <input type="hidden" name="logo_type" value="full_logo">
-</form>
-<div id="brand_box_image">
-    {if $oTournament->getLogoFull()}
-        <br/>
-        <a href="{$oTournament->getLogoFull()}" rel="[photoset]" title="" class="photoset-image"><img
-                    src="{cfg name='path.root.web'}/images/tournament/{$oTournament->getUrl()}/{$oTournament->getLogoFull()}"
-                    alt=""/></a>
-        <label><input onchange="delete_logo('small_logo'); return false;" type="checkbox"
-                      id="tournament_full_logo_delete" name="tournament_full_logo_delete" value="on"
-                      class="input-checkbox"> Удалить большое лого</label>
-    {/if}
-</div>
-</p>
-
+    *}

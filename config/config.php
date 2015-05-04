@@ -26,4 +26,20 @@ $config['field_types'] = array(
     'datetime' => 'datetime',
 );
 
+$config['tournament_logo'] = array(
+    '$extends$' => '___module.uploader.images.default___',
+    'size' => array('large' => '200x200crop', 'medium' => '64x64crop', 'small' => '32x32crop'),
+    'transform' => array(
+        'max_width' => 250,        // максимальная ширина сохраняемой аватары
+        'max_height' => 250,        // максимальная высота сохраняемой аватары
+        'aspect_ratio' => '1',      // соотношение ширины и высоты
+        'watermark' => array(
+            'enable' => false,
+        ),
+        '@mime(gif)' => array(
+            'animation' => true,
+        ),
+    ),
+);
+
 return $config;
