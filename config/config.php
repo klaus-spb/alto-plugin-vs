@@ -28,11 +28,11 @@ $config['field_types'] = array(
 
 $config['tournament_logo'] = array(
     '$extends$' => '___module.uploader.images.default___',
-    'size' => array('large' => '200x200crop', 'medium' => '64x64crop', 'small' => '32x32crop'),
+    'size' => array('large' => '200x200crop', 'medium' => '64x64crop', 'small' => '32x32crop', 'very_small' => '20x20crop'),
     'transform' => array(
-        'max_width' => 250,        // максимальная ширина сохраняемой аватары
-        'max_height' => 250,        // максимальная высота сохраняемой аватары
-        'aspect_ratio' => '1',      // соотношение ширины и высоты
+        'max_width' => 250,
+        'max_height' => 250,
+        'aspect_ratio' => '1',
         'watermark' => array(
             'enable' => false,
         ),
