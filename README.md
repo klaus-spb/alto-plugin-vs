@@ -5,8 +5,7 @@ Plugin for creating leagues and tournaments on altocms
 Plugin can be used for real sport leagues (univesities soccer/hockey/basketball leagues ) and for virtual tournaments 1 vs 1 or teamplay
 
 Release plans:
-- alpha - 10 may
-- beta - 1 june
+- alpha - 15 june
 
 -----------------------------------------------------------------
 Плагин для создания различных турниров на сайте.
@@ -21,6 +20,5 @@ Release plans:
 Заявки на поддержку, заточку плагина под конкретный проект, рассматриваются по скайпу klaus-vs.
 
 Приблизительное время выхода версий:
-- альфа - 10 мая
-- бета - 1 июня
+- альфа - 15 июня
 
