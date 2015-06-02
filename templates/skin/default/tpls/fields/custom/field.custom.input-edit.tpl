@@ -4,7 +4,8 @@
             <span class="input-group-addon">{$oField->GetDescription()}</span>
             <input type="text"
                    name="{$oField->getFieldName()}" id="{$oField->getFieldName()}"
-                   value="{$oObject->getProp($oField->getFieldName())|escape:'html'}" class="form-control">
+                   value="{$oObject->getProp($oField->getFieldName())|escape:'html'}"
+                   {if $onchange}onchange="{$onchange}"{/if} class="form-control">
         </div>
     </div>
 {/if}

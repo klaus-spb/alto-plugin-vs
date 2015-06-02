@@ -1,7 +1,9 @@
+<form action='#' id="admin-tournament-form">
+    <input type="hidden" name="security_ls_key" value="{$ALTO_SECURITY_KEY}">
+    <input type="hidden" name="tournament_id" value="{$oTournament->getTournamentId()}">
 
     {foreach $aFields as $oField}
-        {include file="{Plugin::GetTemplateDir('Vs')}tpls/fields/custom/field.custom.`$oField->getFieldType()`-edit.tpl" oField=$oField oObject=$oTournament}
-
+        {include file="{Plugin::GetTemplateDir('Vs')}tpls/fields/custom/field.custom.`$oField->getFieldType()`-edit.tpl" oField=$oField oObject=$oTournament onchange="update_tournament_fields(); return false;"}
     {/foreach}
 
 
@@ -225,27 +227,26 @@
 
     <br/>
     *}
-Пересчитать турнирку за раунд
-<select class="w200" id="round_id" onchange="update_stattable(); return false;">
-    <OPTION value="99999">-</OPTION>
-    {foreach from=$aRound item=oRound name=el2}
-        <OPTION value="{$oRound->getRoundId()}">{$oRound->getBrief()}</OPTION>
-    {/foreach}
-</select>
-{if $bIsSuperAdmin}
-    <br/>
-    Команды лиги
-    <select class="w200" id="league_id">
-        {foreach from=$aLeagues item=oLeague name=el2}
-            <OPTION value="{$oLeague->getLeagueId()}">{$oLeague->getName()} ({$oLeague->getBrief()})</OPTION>
+    Пересчитать турнирку за раунд
+    <select class="w200" id="round_id" onchange="update_stattable(); return false;">
+        <OPTION value="99999">-</OPTION>
+        {foreach from=$aRound item=oRound name=el2}
+            <OPTION value="{$oRound->getRoundId()}">{$oRound->getBrief()}</OPTION>
         {/foreach}
-
     </select>
-    <a href="#" id=""
-       onclick="ls.au.simple_toggles(this,'setteams', {literal}{{/literal} tournament: {$oTournament->getTournamentId()}, league:$('#league_id').val() {literal}}{/literal}); return false;">Добавить
-        команды</a>
+    {if $bIsSuperAdmin}
+        <br/>
+        Команды лиги
+        <select class="w200" id="league_id">
+            {foreach from=$aLeagues item=oLeague name=el2}
+                <OPTION value="{$oLeague->getLeagueId()}">{$oLeague->getName()} ({$oLeague->getBrief()})</OPTION>
+            {/foreach}
 
-{/if}
+        </select>
+        <a href="#" id=""
+           onclick="ls.au.simple_toggles(this,'setteams', {literal}{{/literal} tournament: {$oTournament->getTournamentId()}, league:$('#league_id').val() {literal}}{/literal}); return false;">Добавить
+            команды</a>
+    {/if}
     {*
     <p>
         <label for="tournament_small_logo">Загрузить маленькое лого (32x32):</label>
@@ -293,3 +294,4 @@
     </p>
 
     *}
+</form>

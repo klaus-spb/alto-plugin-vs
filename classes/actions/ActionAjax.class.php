@@ -2,7 +2,7 @@
 
 class PluginVs_ActionAjax extends PluginVs_Inherit_ActionAjax
 {
-
+    protected $oUserCurrent = null;
 
     public function Init()
     {
@@ -15,6 +15,36 @@ class PluginVs_ActionAjax extends PluginVs_Inherit_ActionAjax
         parent::RegisterEvent();
 
         $this->AddEventPreg('/^admins$/i', '/^tournament$/', 'EventAdminsTournament');
+        $this->AddEventPreg('/^admins$/i', '/^update_tournament$/', 'EventUpdateTournament');
+    }
+
+    protected function EventUpdateTournament()
+    {
+        if (F::CheckVal(F::GetRequest('tournament_id', null, 'post'), 'id', 1, 11)) $tournament_id = F::GetRequest('tournament_id', null, 'post');
+
+
+        if ($oTournament = E::Module('PluginVs\Vs')->GetTournamentByTournamentId($tournament_id)) {
+
+            $aFields = E::Module('PluginVs\Vs')->GetConfigTableItemsByFilter(array(
+                'table_name' => 'tournament',
+                'system' => '0'
+            ));
+
+            foreach ($aFields as $oField) {
+                $value = strip_tags(F::GetRequest($oField->getFieldName(), null, 'post'));
+                if ($oField->getFieldType() == 'date') {
+                    list($d, $m, $y) = explode('.', $value);
+                    if (@checkdate($m, $d, $y)) {
+                        $value = $y . '-' . $m . '-' . $d;
+                    }
+                }
+                $oTournament->setProp($oField->getFieldName(), $value);
+            }
+
+
+            $oTournament->Save();
+        }
+
     }
 
     protected function EventAdminsTournament()
@@ -24,7 +54,7 @@ class PluginVs_ActionAjax extends PluginVs_Inherit_ActionAjax
 
         $oViewer = $this->Viewer_GetLocalViewer();
 
-        if (func_check(getRequest('tournament', null, 'post'), 'id', 1, 11)) $tournament_id = getRequest('tournament', null, 'post');
+        if (F::CheckVal(F::GetRequest('tournament', null, 'post'), 'id', 1, 11)) $tournament_id = F::GetRequest('tournament', null, 'post');
 
         $oTournament = E::Module('PluginVs\Vs')->GetTournamentByTournamentId($tournament_id);
 
